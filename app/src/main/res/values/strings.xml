@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Project_02_exercise_app</string>
+    <string name="sign_in">Sign in!</string>
+    <string name="enter_user_name">Enter user name</string>
 </resources>
