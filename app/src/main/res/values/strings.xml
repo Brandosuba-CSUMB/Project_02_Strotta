@@ -2,4 +2,10 @@
     <string name="app_name">Project_02_exercise_app</string>
     <string name="sign_in">Sign in!</string>
     <string name="enter_user_name">Enter user name</string>
+    <string name="username">Username</string>
+    <string name="enter_password">Enter password</string>
+    <string name="password">Password</string>
+    <string name="no_account">No account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="log_in">Log In</string>
 </resources>
