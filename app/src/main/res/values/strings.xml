@@ -14,4 +14,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="register">REGISTER!</string>
     <string name="already_have_an_account_log_in">Already have an account? Log in!</string>
+    <string name="login">LOGIN!</string>
+    <string name="password_login">Password</string>
+    <string name="username_login">Username</string>
+    <string name="welcome_to_strotta_please_log_in">Welcome To Strotta, Please Log in.</string>
 </resources>
