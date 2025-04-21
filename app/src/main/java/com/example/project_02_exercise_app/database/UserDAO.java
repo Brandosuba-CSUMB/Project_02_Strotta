@@ -29,5 +29,4 @@ public interface UserDAO {
 
     @Query("SELECT * from " + StrottaDatabase.USER_TABLE + " WHERE id == :userId")
     LiveData<User> getUserByUserId(int userId);
-
 }
