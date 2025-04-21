@@ -18,7 +18,7 @@ public interface UserDAO {
     @Delete
     void delete(User user);
 
-    @Query("SELECT * FROM " + StrottaDatabase.USER_TABLE + " ORDER BY username")
+    @Query("SELECT * from " + StrottaDatabase.USER_TABLE + " ORDER BY username")
     LiveData<List<User>> getAllUsers();
 
     @Query("DELETE from " + StrottaDatabase.USER_TABLE)
