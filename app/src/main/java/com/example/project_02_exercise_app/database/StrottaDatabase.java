@@ -1,34 +1,67 @@
 package com.example.project_02_exercise_app.database;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
-@Database(entities = {Strotta.class, User.class}, version = 1, exportSchema = false)
-public abstract class StrottaDatabase {
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@Database(entities = {User.class}, version = 1, exportSchema = false)
+public abstract class StrottaDatabase extends RoomDatabase {
+
     public static final String USER_TABLE = "usertable";
-    public static final String DATABASE_NAME = "strottadatabase";
+    private static final String DATABASE_NAME = "StrottaDatabase";
+    public static final String STROTTA_TABLE = "strottaTable";
+
     private static volatile StrottaDatabase INSTANCE;
-    static StrottaDatabase getDatabase(final Context context){
-        if(INSTANCE == null){
-            synchronized (StrottaDatabase.class){
+    private static final int NUMBER_OF_THREADS = 4;
+
+    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
+    static StrottaDatabase getDatabase(final Context context) {
+        if(INSTANCE == null) {
+            synchronized (StrottaDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            StrottaDatabase.class,
-                            DATABASE_NAME
-                    )
-                            .fallbackToDestructiveMigration().addCallback(addDefaultValues).build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                                    StrottaDatabase.class,
+                                    DATABASE_NAME
+                            )
+                            .fallbackToDestructiveMigration()
+                            .addCallback(addDefaultValues)
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
-    public static final RoomDatabase.Callback addDefaultValues =
-            super.onCreate(db)
+
+    private static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            Log.i("DAC_STROTTA", "DATABASE CREATED!");
+            databaseWriteExecutor.execute(() -> {
+                UserDAO dao = INSTANCE.userDAO();
+                dao.deleteAll();
+                User admin = new User("admin1", "admin1");
+                admin.setAdmin(true);
+                dao.insert(admin);
+
+                User testUser1 = new User("testuser1", "testuser1");
+                dao.insert(testUser1);
+            });
+        }
+    };
+
+    public abstract StrottaDAO strottaDAO();
+
+    public abstract UserDAO userDAO();
 }
