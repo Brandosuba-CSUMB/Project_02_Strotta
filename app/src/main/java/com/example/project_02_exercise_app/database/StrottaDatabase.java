@@ -9,12 +9,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Strotta.class}, version = 3, exportSchema = false)
 public abstract class StrottaDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";
@@ -30,7 +31,8 @@ public abstract class StrottaDatabase extends RoomDatabase {
         if(INSTANCE == null) {
             synchronized (StrottaDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.
+                                            getApplicationContext(),
                                     StrottaDatabase.class,
                                     DATABASE_NAME
                             )

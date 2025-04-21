@@ -1,6 +1,7 @@
 package com.example.project_02_exercise_app;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -13,16 +14,16 @@ import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding binding;
-
     private StrottaRepository repository;
 
+    private ActivityLoginBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        repository = new StrottaRepository(getApplication());
+        binding.loginButton.setOnClickListener(v -> verifyUser());
         binding.passswordLoginEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,54 +33,30 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void verifyUser() {
-
         String username = binding.userNameLoginEditText.getText().toString();
-
         String password = binding.passswordLoginEditText.getText().toString();
 
-
-        if (username.isEmpty()) {
-            toastMaker("Username may not be blank.");
+        if (username.isEmpty() || password.isEmpty()) {
+            toastMaker("Username and password cannot be blank.");
             return;
         }
 
         LiveData<User> userObserver = repository.getUserByUserName(username);
         userObserver.observe(this, user -> {
-            if (user != null) {
-                String password = binding.passswordLoginEditText.getText().toString();
-                if (password.equals(user.getPassword())) {
-                    startActivity(LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId()));
+            if (user != null && password.equals(user.getPassword())) {
+                SharedPreferences prefs = getSharedPreferences(MainActivity.PREFERENCE_NAME, MODE_PRIVATE);
+                prefs.edit().putInt(MainActivity.USER_ID_KEY, user.getId()).apply();
+                if (user.isAdmin()) {
+                    startActivity(LandingActivity.landingActivityIntentFactory(this, user.getId()));
                 } else {
-                    toastMaker("Invalid password");
-                    binding.passswordLoginEditText.setSelection(0);
+                    startActivity(MainActivity.mainActivityIntentFactory(this, user.getId()));
                 }
+
+                finish();
             } else {
-                toastMaker(String.format("%s is not a valid username.", username));
-                binding.userNameLoginEditText.setSelection(0);
+                toastMaker("Incorrect username or password.");
             }
         });
-
-        if (password.isEmpty()) {
-            toastMaker("Password may not be blank.");
-            return;
-        }
-
-
-//        LiveData<User> userObserver = repository.getUserByUserName(username);
-//        userObserver.observe(this, user -> {
-//            if (user != null) {
-//                String password = binding.passswordLoginEditText.getText().toString();
-//                if (password.equals(user.getPassword())) {
-//                    startActivity(LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId()));
-//                } else {
-//                    toastMaker("Invalid password");
-//                    binding.passswordLoginEditText.setSelection(0);
-//                }
-//            } else {
-//                toastMaker(String.format("%s is not a valid username.", username));
-//                binding.userNameLoginEditText.setSelection(0);
-//            }
-//        });
     }
 
     private void toastMaker(String message) {

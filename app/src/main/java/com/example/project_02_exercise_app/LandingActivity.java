@@ -1,25 +1,37 @@
 package com.example.project_02_exercise_app;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.databinding.ActivityLandingBinding;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class LandingActivity extends AppCompatActivity {
 
+    private static final String USER_ID_KEY = "com.example.project_02_exercise_app.USER_ID_KEY";
     private ActivityLandingBinding binding;
+    private StrottaRepository repository;
+    private int userId;
 
-    public static Intent landingActivityIntentFactory(Context applicationContext, int id) {
-        return null;
+    public static Intent landingActivityIntentFactory(Context context, int userId) {
+        Intent intent = new Intent(context, LandingActivity.class);
+        intent.putExtra(USER_ID_KEY, userId);
+        return intent;
     }
 
     @Override
@@ -27,33 +39,67 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLandingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
-        binding.landingCardioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LandingActivity.this, "Woo! Cardio!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        
-        binding.landingStrengthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LandingActivity.this, "Wow! Strength!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        
-        binding.landingCalisthenicsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LandingActivity.this, "Awesome! Calisthenics!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        
-        binding.landingAdminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LandingActivity.this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        repository = new StrottaRepository(getApplication());
+        userId = getIntent().getIntExtra(USER_ID_KEY, -1);
+
+        if (userId == -1) {
+            Toast.makeText(this, "Error: No user ID received!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
+        binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
+        binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
+        binding.landingAdminButton.setOnClickListener(v ->
+                Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show());
+    }
+
+    private void logExercise(String type) {
+        String duration = "30 minutes";
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        Strotta log = new Strotta(userId, type, duration, date);
+        repository.insertLog(log);
+        Toast.makeText(this, type + " logged!", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.logoutMenuItem);
+        item.setTitle("Logout");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logoutMenuItem) {
+            showLogoutDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout?")
+                .setMessage("Do you want to log out?")
+                .setPositiveButton("Yes", (dialog, which) -> logout())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+    private void logout() {
+        SharedPreferences prefs = getSharedPreferences(MainActivity.PREFERENCE_NAME, MODE_PRIVATE);
+        prefs.edit().remove(MainActivity.USER_ID_KEY).apply();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
