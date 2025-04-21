@@ -23,7 +23,7 @@ public class StrottaRepository {
         StrottaDatabase db = StrottaDatabase.getDatabase(application);
         this.strottaDAO = db.strottaDAO();
         this.userDAO = db.userDAO();
-        this.allLogs = (ArrayList<Strotta>) this.strottaDAO.getAllRocords();
+        this.allLogs = (ArrayList<Strotta>) this.strottaDAO.getAllRecords();
     }
 
 
