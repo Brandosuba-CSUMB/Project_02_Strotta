@@ -1,4 +1,4 @@
-Strotta Application
+Strotta Application,
 Our Design Doc: https://docs.google.com/document/d/1SlzLh-S_2CWPrFCiRjAzviz2ZQtpv7VIEtB77gN6cGE/edit?tab=t.0
 
 Overview and plan:
