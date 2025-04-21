@@ -1,0 +1,59 @@
+Index: app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.lifecycle.LiveData;\r\n\r\nimport com.example.project_02_exercise_app.database.StrottaRepository;\r\n\r\nimport com.example.project_02_exercise_app.database.entities.User;\r\nimport com.example.project_02_exercise_app.databinding.ActivityLoginBinding;\r\n\r\npublic class LoginActivity extends AppCompatActivity {\r\n    private ActivityLoginBinding binding;\r\n\r\n    private StrottaRepository repository;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState){\r\n        super.onCreate(savedInstanceState);\r\n        binding = ActivityLoginBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n\r\n        binding.passswordLoginEditText.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                verifyUser();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void verifyUser() {\r\n\r\n        String username = binding.userNameLoginEditText.getText().toString();\r\n\r\n        String password = binding.passswordLoginEditText.getText().toString();\r\n\r\n\r\n        if (username.isEmpty()) {\r\n            toastMaker(\"Username may not be blank.\");\r\n            return;\r\n        }\r\n\r\n        LiveData<User> userObserver = repository.getUserByUserName(username);\r\n        userObserver.observe(this, user -> {\r\n            if (user != null) {\r\n                String password = binding.passswordLoginEditText.getText().toString();\r\n                if (password.equals(user.getPassword())) {\r\n                    startActivity(LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId()));\r\n                } else {\r\n                    toastMaker(\"Invalid password\");\r\n                    binding.passswordLoginEditText.setSelection(0);\r\n                }\r\n            } else {\r\n                toastMaker(String.format(\"%s is not a valid username.\", username));\r\n                binding.userNameLoginEditText.setSelection(0);\r\n            }\r\n        });\r\n\r\n        if (password.isEmpty()) {\r\n            toastMaker(\"Password may not be blank.\");\r\n            return;\r\n        }\r\n\r\n\r\n//        LiveData<User> userObserver = repository.getUserByUserName(username);\r\n//        userObserver.observe(this, user -> {\r\n//            if (user != null) {\r\n//                String password = binding.passswordLoginEditText.getText().toString();\r\n//                if (password.equals(user.getPassword())) {\r\n//                    startActivity(LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId()));\r\n//                } else {\r\n//                    toastMaker(\"Invalid password\");\r\n//                    binding.passswordLoginEditText.setSelection(0);\r\n//                }\r\n//            } else {\r\n//                toastMaker(String.format(\"%s is not a valid username.\", username));\r\n//                binding.userNameLoginEditText.setSelection(0);\r\n//            }\r\n//        });\r\n    }\r\n\r\n    private void toastMaker(String message) {\r\n        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();\r\n    }\r\n\r\n    static Intent loginIntentFactory(Context context) {\r\n        return new Intent(context, LoginActivity.class);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java b/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java	(revision 06d7e947c3b4721753461fcb84742ff4f0fd6719)
++++ b/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java	(date 1745221444131)
+@@ -8,8 +8,6 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.lifecycle.LiveData;
+ 
+-import com.example.project_02_exercise_app.database.StrottaRepository;
+-
+ import com.example.project_02_exercise_app.database.entities.User;
+ import com.example.project_02_exercise_app.databinding.ActivityLoginBinding;
+ 
+Index: app/src/main/java/com/example/project_02_exercise_app/database/StrottaRepository.java
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaRepository.java b/app/src/main/java/com/example/project_02_exercise_app/database/StrottaRepository.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaRepository.java	(revision 06d7e947c3b4721753461fcb84742ff4f0fd6719)
++++ /dev/null	(revision 06d7e947c3b4721753461fcb84742ff4f0fd6719)
+@@ -1,33 +0,0 @@
+-package com.example.project_02_exercise_app.database;
+-
+-import android.app.Application;
+-
+-import androidx.lifecycle.LiveData;
+-
+-import com.example.project_02_exercise_app.database.entities.Strotta;
+-import com.example.project_02_exercise_app.database.entities.User;
+-
+-import java.lang.reflect.Array;
+-import java.util.ArrayList;
+-
+-public class StrottaRepository {
+-
+-    private StrottaDAO strottaDAO;
+-    private final UserDAO userDAO;
+-
+-    private ArrayList<Strotta> allLogs;
+-
+-    private static StrottaRepository repository;
+-
+-    private StrottaRepository(Application application) {
+-        StrottaDatabase db = StrottaDatabase.getDatabase(application);
+-        this.strottaDAO = db.strottaDAO();
+-        this.userDAO = db.userDAO();
+-        this.allLogs = (ArrayList<Strotta>) this.strottaDAO.getAllRocords();
+-    }
+-
+-
+-    public LiveData<User> getUserByUserName(String username) {
+-        return userDAO.getUserByUserName(username);
+-    }
+-}
