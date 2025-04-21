@@ -27,4 +27,5 @@
     <string name="type_of_cardio">Type of Cardio</string>
     <string name="cardio_main">Cardio</string>
     <string name="log_exercise">Log Exercise!</string>
+    <string name="logged_in">Logged in.</string>
 </resources>
