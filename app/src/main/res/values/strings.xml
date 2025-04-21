@@ -23,4 +23,8 @@
     <string name="strength">Strength</string>
     <string name="calisthenics">Calisthenics</string>
     <string name="admin_page">Admin Page</string>
+    <string name="log">Log!</string>
+    <string name="type_of_cardio">Type of Cardio</string>
+    <string name="cardio_main">Cardio</string>
+    <string name="log_exercise">Log Exercise!</string>
 </resources>
