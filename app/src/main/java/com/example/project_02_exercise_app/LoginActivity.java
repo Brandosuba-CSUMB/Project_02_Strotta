@@ -8,8 +8,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
-import com.example.project_02_exercise_app.database.StrottaRepository;
-
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.databinding.ActivityLoginBinding;
 
