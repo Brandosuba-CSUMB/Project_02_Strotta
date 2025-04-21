@@ -1,5 +1,7 @@
 package com.example.project_02_exercise_app;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -49,6 +51,5 @@ public class LandingActivity extends AppCompatActivity {
                 Toast.makeText(LandingActivity.this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
