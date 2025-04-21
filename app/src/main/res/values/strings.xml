@@ -18,4 +18,9 @@
     <string name="password_login">Password</string>
     <string name="username_login">Username</string>
     <string name="welcome_to_strotta_please_log_in">Welcome To Strotta, Please Log in.</string>
+    <string name="which_exercise_type">Which exercise type?</string>
+    <string name="cardio">Cardio</string>
+    <string name="strength">Strength</string>
+    <string name="calisthenics">Calisthenics</string>
+    <string name="admin_page">Admin Page</string>
 </resources>
