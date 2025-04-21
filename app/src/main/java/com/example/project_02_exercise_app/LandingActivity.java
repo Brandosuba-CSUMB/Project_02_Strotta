@@ -18,6 +18,10 @@ public class LandingActivity extends AppCompatActivity {
 
     private ActivityLandingBinding binding;
 
+    public static Intent landingActivityIntentFactory(Context applicationContext, int id) {
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
