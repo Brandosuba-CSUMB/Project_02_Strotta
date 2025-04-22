@@ -9,28 +9,18 @@ import java.util.Objects;
 
 @Entity(tableName = StrottaDatabase.USER_TABLE)
 public class User {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String username;
     private String password;
+
     private boolean isAdmin;
 
-    public User(String password, String username) {
-        this.password = password;
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
         isAdmin = false;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && isAdmin == user.isAdmin && Objects.equals(username, user.username) && Objects.equals(password, user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, isAdmin);
     }
 
     public int getId() {
@@ -41,12 +31,12 @@ public class User {
         this.id = id;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -57,11 +47,25 @@ public class User {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && isAdmin == user.isAdmin && Objects.equals(username, user.username) && Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, isAdmin);
     }
 }

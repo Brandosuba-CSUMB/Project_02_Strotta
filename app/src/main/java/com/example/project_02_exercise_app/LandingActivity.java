@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.databinding.ActivityLandingBinding;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +29,7 @@ public class LandingActivity extends AppCompatActivity {
     private ActivityLandingBinding binding;
     private StrottaRepository repository;
     private int userId;
+    private User user;
 
     public static Intent landingActivityIntentFactory(Context context, int userId) {
         Intent intent = new Intent(context, LandingActivity.class);
@@ -39,7 +42,8 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLandingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Toolbar tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
         repository = new StrottaRepository(getApplication());
         userId = getIntent().getIntExtra(USER_ID_KEY, -1);
 
@@ -48,6 +52,11 @@ public class LandingActivity extends AppCompatActivity {
             finish();
             return;
         }
+        repository.getUserByUserId(userId)
+                .observe(this, u -> {
+                    this.user = u;
+                    invalidateOptionsMenu();
+                });
 
         binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
@@ -57,11 +66,10 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void logExercise(String type) {
-        String duration = "30 minutes";
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
-        Strotta log = new Strotta(userId, type, duration, date);
-        repository.insertLog(log);
+        String duration = "30 minutes";  // or whatever you generate
+        int minutes = Integer.parseInt(duration.split(" ")[0]);
+        Strotta log = new Strotta(userId, minutes);
+        repository.insertStrottaRepository(log);
         Toast.makeText(this, type + " logged!", Toast.LENGTH_SHORT).show();
     }
     @Override
@@ -73,7 +81,11 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
-        item.setTitle("Logout");
+        if(user != null){
+            item.setTitle(user.getUsername());
+        }else {
+            item.setTitle("Logout");
+        }
         return true;
     }
 
@@ -94,12 +106,11 @@ public class LandingActivity extends AppCompatActivity {
                 .show();
     }
     private void logout() {
-        SharedPreferences prefs = getSharedPreferences(MainActivity.PREFERENCE_NAME, MODE_PRIVATE);
-        prefs.edit().remove(MainActivity.USER_ID_KEY).apply();
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
+        prefs.edit().remove(getString(R.string.preference_userId_key)).apply();
 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
     }
 }

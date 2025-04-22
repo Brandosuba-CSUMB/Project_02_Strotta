@@ -1,4 +1,5 @@
 package com.example.project_02_exercise_app;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,52 +10,60 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
+import com.example.project_02_exercise_app.MainActivity;
 import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
+    private ActivityLoginBinding binding;
     private StrottaRepository repository;
 
-    private ActivityLoginBinding binding;
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        repository = new StrottaRepository(getApplication());
-        binding.loginButton.setOnClickListener(v -> verifyUser());
-        binding.passswordLoginEditText.setOnClickListener(new View.OnClickListener() {
+        repository = StrottaRepository.getRepository(getApplication());
+        binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 verifyUser();
             }
         });
     }
-
-    private void verifyUser() {
+    private void verifyUser(){
         String username = binding.userNameLoginEditText.getText().toString();
-        String password = binding.passswordLoginEditText.getText().toString();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            toastMaker("Username and password cannot be blank.");
+        if(username.isEmpty()){
+            toastMaker("username should not be blank");
             return;
         }
-
         LiveData<User> userObserver = repository.getUserByUserName(username);
         userObserver.observe(this, user -> {
-            if (user != null && password.equals(user.getPassword())) {
-                SharedPreferences prefs = getSharedPreferences(MainActivity.PREFERENCE_NAME, MODE_PRIVATE);
-                prefs.edit().putInt(MainActivity.USER_ID_KEY, user.getId()).apply();
-                if (user.isAdmin()) {
-                    startActivity(LandingActivity.landingActivityIntentFactory(this, user.getId()));
+            if (user != null) {
+                String password = binding.passwordLoginEditText.getText().toString();
+                if (password.equals(user.getPassword())) {
+                    Intent intent;
+                    if (user.isAdmin()) {
+                        intent = LandingActivity.landingActivityIntentFactory(
+                                getApplicationContext(), user.getId());
+                    } else {
+                        intent = MainActivity.mainActivityIntentFactory(
+                                getApplicationContext(), user.getId());
+                    }
+                    intent.setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    );
+                    startActivity(intent);
+                    finish();
                 } else {
-                    startActivity(MainActivity.mainActivityIntentFactory(this, user.getId()));
+                    toastMaker("Invalid password");
+                    binding.passwordLoginEditText.setSelection(0);
                 }
-
-                finish();
             } else {
-                toastMaker("Incorrect username or password.");
+                toastMaker(username + " is not a valid username.");
+                binding.userNameLoginEditText.setSelection(0);
             }
         });
     }
@@ -63,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    static Intent loginIntentFactory(Context context) {
-        return new Intent(context, LoginActivity.class);
+    public static Intent loginIntentFactory(Context context){
+        return new Intent(context, LoginActivity.class );
     }
 }

@@ -43,7 +43,12 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    implementation libs.room.runtime.android
-    annotationProcessor(libs.room.runtime.android)
-    implementation(libs.lifecycle.livedata.ktx)
+    // Room runtime
+    implementation "androidx.room:room-runtime:2.7.0"
+
+// Room annotation processor for Java projects
+    annotationProcessor "androidx.room:room-compiler:2.7.0"
+
+// (optional) Kotlin extensions / coroutines
+    implementation "androidx.room:room-ktx:2.7.0"
 }

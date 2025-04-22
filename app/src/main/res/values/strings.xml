@@ -19,13 +19,13 @@
     <string name="username_login">Username</string>
     <string name="welcome_to_strotta_please_log_in">Welcome To Strotta, Please Log in.</string>
     <string name="which_exercise_type">Which exercise type?</string>
-    <string name="cardio">Cardio</string>
     <string name="strength">Strength</string>
     <string name="calisthenics">Calisthenics</string>
     <string name="admin_page">Admin Page</string>
     <string name="log">Log!</string>
     <string name="type_of_cardio">Type of Cardio</string>
-    <string name="cardio_main">Cardio</string>
     <string name="log_exercise">Log Exercise!</string>
     <string name="logged_in">Logged in.</string>
+    <string name="preference_userId_key">preference_userId_key</string>
+    <string name="preference_file_key">preference_file_key</string>
 </resources>

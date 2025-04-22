@@ -7,15 +7,18 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.project_02_exercise_app.MainActivity;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
+import com.example.project_02_exercise_app.database.typeConverters.LocalDateTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-@Database(entities = {User.class, Strotta.class}, version = 3, exportSchema = false)
+@TypeConverters(LocalDateTypeConverter.class)
+@Database(entities = {User.class, Strotta.class}, version = 2, exportSchema = false)
 public abstract class StrottaDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";
@@ -25,14 +28,14 @@ public abstract class StrottaDatabase extends RoomDatabase {
     private static volatile StrottaDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
-    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static StrottaDatabase getDatabase(final Context context) {
-        if(INSTANCE == null) {
-            synchronized (StrottaDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.
-                                            getApplicationContext(),
+    static StrottaDatabase getDatabase(final Context context){
+        if (INSTANCE == null) {
+            synchronized (StrottaDatabase.class){
+                if(INSTANCE == null){
+                    INSTANCE = Room.databaseBuilder(
+                                    context.getApplicationContext(),
                                     StrottaDatabase.class,
                                     DATABASE_NAME
                             )
@@ -45,24 +48,24 @@ public abstract class StrottaDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback() {
+    public static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback(){
         @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+        public void onCreate(@NonNull SupportSQLiteDatabase db){
             super.onCreate(db);
-            Log.i("DAC_STROTTA", "DATABASE CREATED!");
-            databaseWriteExecutor.execute(() -> {
+            Log.i(MainActivity.TAG, "DATABASE CREATED");
+            databaseWriteExecution.execute(()->{
                 UserDAO dao = INSTANCE.userDAO();
                 dao.deleteAll();
-                User admin = new User("admin1", "admin1");
+                User admin = new User("admin1","admin1");
                 admin.setAdmin(true);
                 dao.insert(admin);
 
                 User testUser1 = new User("testuser1", "testuser1");
                 dao.insert(testUser1);
             });
+
         }
     };
-
     public abstract StrottaDAO strottaDAO();
 
     public abstract UserDAO userDAO();

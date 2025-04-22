@@ -3,6 +3,7 @@ package com.example.project_02_exercise_app.database;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.project_02_exercise_app.database.entities.Strotta;
@@ -11,10 +12,14 @@ import java.util.List;
 
 @Dao
 public interface StrottaDAO {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Strotta strotta);
+    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " ORDER BY date DESC")
+    List<Strotta> getAllRecords();
 
-    @Insert
-    void insert(Strotta log);
+    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
+    List<Strotta> getRecordsByUserId(int loggedInUserId);
 
-    @Query("SELECT * FROM strottaTable WHERE userId = :userId ORDER BY date DESC")
-    LiveData<List<Strotta>> getAllLogsByUser(int userId);
+    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
+    LiveData<List<Strotta>> getRecordsByUserIdLiveData(int loggedInUserId);
 }
