@@ -55,13 +55,13 @@ public class SignupActivity extends AppCompatActivity {
             }else{
                 User newUser = new User(user,pass);
                 repository.insertUser(newUser);
-
-                obsOnce(repository.getUserByUserName(user),this, insertedUser->{
-                   if(insertedUser !=null){
-                       Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(),insertedUser.getId());
-                       startActivity(intent);
-                   }
-                });
+                toastMaker("User is now made!");
+//                obsOnce(repository.getUserByUserName(user),this, insertedUser->{
+//                   if(insertedUser !=null){
+//                       Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(),insertedUser.getId());
+//                       startActivity(intent);
+//                   }
+//                });
             }
         });
     }
