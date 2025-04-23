@@ -4,9 +4,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     >
 
     <TextView
+        android:textColor="#FFFFFF"
         android:id="@+id/titleRegisterTextView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -19,6 +21,8 @@
         app:layout_constraintVertical_bias="0.086" />
 
     <EditText
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="85dp"
@@ -32,6 +36,8 @@
         app:layout_constraintTop_toBottomOf="@+id/titleRegisterTextView" />
 
     <EditText
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="75dp"
@@ -45,6 +51,8 @@
         app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
 
     <EditText
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:id="@+id/confirmPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="75dp"
@@ -68,6 +76,7 @@
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditText" />
 
     <TextView
+        android:textColor="#FFFFFF"
         android:id="@+id/switchToLoginTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
