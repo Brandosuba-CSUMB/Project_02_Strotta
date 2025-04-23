@@ -52,13 +52,15 @@ public class LoginActivity extends AppCompatActivity {
                 String password = binding.passwordLoginEditText.getText().toString();
                 if (password.equals(user.getPassword())) {
                     Intent intent;
-                    if (user.isAdmin()) {
-                        intent = LandingActivity.landingActivityIntentFactory(
-                                getApplicationContext(), user.getId());
-                    } else {
-                        intent = MainActivity.mainActivityIntentFactory(
-                                getApplicationContext(), user.getId());
-                    }
+                    intent = LandingActivity.landingActivityIntentFactory(
+                            getApplicationContext(), user.getId());
+//                    if (user.isAdmin()) {
+//                        intent = LandingActivity.landingActivityIntentFactory(
+//                                getApplicationContext(), user.getId());
+//                    } else {
+//                        intent = MainActivity.mainActivityIntentFactory(
+//                                getApplicationContext(), user.getId());
+//                    }
                     intent.setFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
                     );
