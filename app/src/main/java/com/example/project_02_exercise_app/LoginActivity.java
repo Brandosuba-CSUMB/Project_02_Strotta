@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,13 +26,19 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         repository = StrottaRepository.getRepository(getApplication());
+
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 verifyUser();
             }
-        });
-    }
+    });
+    TextView signup = findViewById(R.id.switchToSignUpTextView);
+    signup.setOnClickListener(v ->{
+        Intent  intent = new Intent(LoginActivity.this,SignupActivity.class);
+        startActivity(intent);
+    });
+}
     private void verifyUser(){
         String username = binding.userNameLoginEditText.getText().toString();
 
