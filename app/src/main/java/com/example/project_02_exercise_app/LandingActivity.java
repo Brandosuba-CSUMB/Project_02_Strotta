@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 
 import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Strotta;
@@ -26,6 +27,8 @@ import java.util.Locale;
 public class LandingActivity extends AppCompatActivity {
 
     private static final String USER_ID_KEY = "com.example.project_02_exercise_app.USER_ID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.project_02_exercise_app.SAVED_INSTANCE_STATE_USERID_KEY";
+    private static final int LOGGED_OUT = -1;
     private ActivityLandingBinding binding;
     private StrottaRepository repository;
     private int userId;
@@ -42,9 +45,14 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLandingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        repository = new StrottaRepository(getApplication());
+
+        //repository = new StrottaRepository(getApplication());
+        repository = StrottaRepository.getRepository(getApplication());
+        loginUser(savedInstanceState);
+
         userId = getIntent().getIntExtra(USER_ID_KEY, -1);
 
         if (userId == -1) {
@@ -62,9 +70,34 @@ public class LandingActivity extends AppCompatActivity {
         binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
-        binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
+       // binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
         binding.landingAdminButton.setOnClickListener(v ->
                 Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show());
+    }
+
+    private void loginUser(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+
+        userId = sharedPreferences.getInt(getString(R.string.preference_userId_key), LOGGED_OUT);
+
+        if (userId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            userId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if (userId == LOGGED_OUT) {
+            userId = getIntent().getIntExtra(USER_ID_KEY, LOGGED_OUT);
+        }
+        if (userId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(userId);
+        userObserver.observe(this, user -> {
+            this.user = user;
+            if (this.user != null) {
+                invalidateOptionsMenu();
+            }
+        });
     }
 
     private void logExercise(String type) {
