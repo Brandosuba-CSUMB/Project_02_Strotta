@@ -61,10 +61,12 @@ public class LandingActivity extends AppCompatActivity {
             return;
         }
 
-        repository.getUserByUserId(userId)
-                .observe(this, u -> {
-                    this.user = u;
-                    invalidateOptionsMenu();
+        repository.getUserByUserId(userId).observe(this, u -> {
+            if( u == null){
+                return;
+            }
+            invalidateOptionsMenu();
+            binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
                 });
 
         binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
