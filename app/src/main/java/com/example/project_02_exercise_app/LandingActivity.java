@@ -52,6 +52,7 @@ public class LandingActivity extends AppCompatActivity {
             finish();
             return;
         }
+
         repository.getUserByUserId(userId)
                 .observe(this, u -> {
                     this.user = u;
@@ -61,9 +62,7 @@ public class LandingActivity extends AppCompatActivity {
         binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
-        if (user != null) {
-            binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
-        }
+        binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
         binding.landingAdminButton.setOnClickListener(v ->
                 Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show());
     }
