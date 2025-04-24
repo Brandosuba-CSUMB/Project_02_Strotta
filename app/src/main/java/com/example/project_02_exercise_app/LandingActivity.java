@@ -69,7 +69,9 @@ public class LandingActivity extends AppCompatActivity {
             binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
                 });
 
-        binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
+        binding.landingCardioButton.setOnClickListener(v ->
+                startActivity(ActivityCardio.cardioIntentFactory(this)));
+
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
        // binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
