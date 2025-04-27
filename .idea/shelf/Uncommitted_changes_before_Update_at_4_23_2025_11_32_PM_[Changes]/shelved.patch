@@ -1,0 +1,179 @@
+Index: app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app.database;\r\n\r\nimport android.content.Context;\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\nimport androidx.room.TypeConverters;\r\nimport androidx.sqlite.db.SupportSQLiteDatabase;\r\n\r\nimport com.example.project_02_exercise_app.MainActivity;\r\nimport com.example.project_02_exercise_app.database.entities.Strotta;\r\nimport com.example.project_02_exercise_app.database.entities.User;\r\nimport com.example.project_02_exercise_app.database.typeConverters.LocalDateTypeConverter;\r\n\r\nimport java.util.concurrent.ExecutorService;\r\nimport java.util.concurrent.Executors;\r\n@TypeConverters(LocalDateTypeConverter.class)\r\n@Database(entities = {User.class, Strotta.class}, version = 2, exportSchema = false)\r\npublic abstract class StrottaDatabase extends RoomDatabase {\r\n\r\n    public static final String USER_TABLE = \"usertable\";\r\n    private static final String DATABASE_NAME = \"StrottaDatabase\";\r\n    public static final String STROTTA_TABLE = \"strottaTable\";\r\n\r\n    private static volatile StrottaDatabase INSTANCE;\r\n    private static final int NUMBER_OF_THREADS = 4;\r\n\r\n    static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);\r\n\r\n    static StrottaDatabase getDatabase(final Context context){\r\n        if (INSTANCE == null) {\r\n            synchronized (StrottaDatabase.class){\r\n                if(INSTANCE == null){\r\n                    INSTANCE = Room.databaseBuilder(\r\n                                    context.getApplicationContext(),\r\n                                    StrottaDatabase.class,\r\n                                    DATABASE_NAME\r\n                            )\r\n                            .fallbackToDestructiveMigration()\r\n                            .addCallback(addDefaultValues)\r\n                            .build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n\r\n    public static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback(){\r\n        @Override\r\n        public void onCreate(@NonNull SupportSQLiteDatabase db){\r\n            super.onCreate(db);\r\n            Log.i(MainActivity.TAG, \"DATABASE CREATED\");\r\n            databaseWriteExecution.execute(()->{\r\n                UserDAO dao = INSTANCE.userDAO();\r\n                dao.deleteAll();\r\n                User admin = new User(\"admin1\",\"admin1\");\r\n                admin.setAdmin(true);\r\n                dao.insert(admin);\r\n\r\n                User testUser1 = new User(\"testuser1\", \"testuser1\");\r\n                dao.insert(testUser1);\r\n            });\r\n\r\n        }\r\n    };\r\n    public abstract StrottaDAO strottaDAO();\r\n\r\n    public abstract UserDAO userDAO();\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java b/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java	(revision 81f28da30d7812a2796ff8868b5e66449720466b)
++++ b/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java	(date 1745474282461)
+@@ -18,7 +18,7 @@
+ import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.Executors;
+ @TypeConverters(LocalDateTypeConverter.class)
+-@Database(entities = {User.class, Strotta.class}, version = 2, exportSchema = false)
++@Database(entities = {User.class, Strotta.class}, version = 1, exportSchema = false)
+ public abstract class StrottaDatabase extends RoomDatabase {
+ 
+     public static final String USER_TABLE = "usertable";
+@@ -56,6 +56,7 @@
+             databaseWriteExecution.execute(()->{
+                 UserDAO dao = INSTANCE.userDAO();
+                 dao.deleteAll();
++
+                 User admin = new User("admin1","admin1");
+                 admin.setAdmin(true);
+                 dao.insert(admin);
+Index: app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.lifecycle.LiveData;\r\n\r\nimport com.example.project_02_exercise_app.MainActivity;\r\nimport com.example.project_02_exercise_app.database.StrottaRepository;\r\nimport com.example.project_02_exercise_app.database.entities.User;\r\nimport com.example.project_02_exercise_app.databinding.ActivityLoginBinding;\r\n\r\npublic class LoginActivity extends AppCompatActivity {\r\n    private ActivityLoginBinding binding;\r\n    private StrottaRepository repository;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        binding = ActivityLoginBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n        repository = StrottaRepository.getRepository(getApplication());\r\n\r\n        binding.loginButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                verifyUser();\r\n            }\r\n    });\r\n    TextView signup = findViewById(R.id.switchToSignUpTextView);\r\n    signup.setOnClickListener(v ->{\r\n        Intent  intent = new Intent(LoginActivity.this,SignupActivity.class);\r\n        startActivity(intent);\r\n    });\r\n}\r\n    private void verifyUser(){\r\n        String username = binding.userNameLoginEditText.getText().toString();\r\n\r\n        if(username.isEmpty()){\r\n            toastMaker(\"username should not be blank\");\r\n            return;\r\n        }\r\n        LiveData<User> userObserver = repository.getUserByUserName(username);\r\n        userObserver.observe(this, user -> {\r\n            if (user != null) {\r\n                String password = binding.passwordLoginEditText.getText().toString();\r\n                if (password.equals(user.getPassword())) {\r\n                    Intent intent;\r\n                    intent = LandingActivity.landingActivityIntentFactory(\r\n                            getApplicationContext(), user.getId());\r\n//                    if (user.isAdmin()) {\r\n//                        intent = LandingActivity.landingActivityIntentFactory(\r\n//                                getApplicationContext(), user.getId());\r\n//                    } else {\r\n//                        intent = MainActivity.mainActivityIntentFactory(\r\n//                                getApplicationContext(), user.getId());\r\n//                    }\r\n                    intent.setFlags(\r\n                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK\r\n                    );\r\n                    startActivity(intent);\r\n                    finish();\r\n                } else {\r\n                    toastMaker(\"Invalid password\");\r\n                    binding.passwordLoginEditText.setSelection(0);\r\n                }\r\n            } else {\r\n                toastMaker(username + \" is not a valid username.\");\r\n                binding.userNameLoginEditText.setSelection(0);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void toastMaker(String message) {\r\n        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();\r\n    }\r\n\r\n    public static Intent loginIntentFactory(Context context){\r\n        return new Intent(context, LoginActivity.class );\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java b/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java	(revision 81f28da30d7812a2796ff8868b5e66449720466b)
++++ b/app/src/main/java/com/example/project_02_exercise_app/LoginActivity.java	(date 1745474855531)
+@@ -38,32 +38,32 @@
+         Intent  intent = new Intent(LoginActivity.this,SignupActivity.class);
+         startActivity(intent);
+     });
++
++
+ }
+     private void verifyUser(){
+-        String username = binding.userNameLoginEditText.getText().toString();
++        String username = binding.userNameLoginEditText.getText().toString().trim();
++        String password = binding.passwordLoginEditText.getText().toString();
+ 
+-        if(username.isEmpty()){
+-            toastMaker("username should not be blank");
++        if (username.isEmpty()) {
++            toastMaker("Username should not be blank");
+             return;
+         }
++
+         LiveData<User> userObserver = repository.getUserByUserName(username);
+         userObserver.observe(this, user -> {
+             if (user != null) {
+-                String password = binding.passwordLoginEditText.getText().toString();
+                 if (password.equals(user.getPassword())) {
+-                    Intent intent;
+-                    intent = LandingActivity.landingActivityIntentFactory(
+-                            getApplicationContext(), user.getId());
+-//                    if (user.isAdmin()) {
+-//                        intent = LandingActivity.landingActivityIntentFactory(
+-//                                getApplicationContext(), user.getId());
+-//                    } else {
+-//                        intent = MainActivity.mainActivityIntentFactory(
+-//                                getApplicationContext(), user.getId());
+-//                    }
+-                    intent.setFlags(
+-                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
++                    SharedPreferences prefs = getSharedPreferences(
++                            getString(R.string.preference_file_key), MODE_PRIVATE
+                     );
++                    prefs.edit().putInt(getString(R.string.preference_userId_key), user.getId()).apply();
++
++                    Intent intent = user.isAdmin()
++                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
++                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
++
++                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                     startActivity(intent);
+                     finish();
+                 } else {
+Index: app/src/main/java/com/example/project_02_exercise_app/LandingActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app;\r\n\r\nimport android.app.AlertDialog;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.Menu;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.appcompat.widget.Toolbar;\r\n\r\nimport com.example.project_02_exercise_app.database.StrottaRepository;\r\nimport com.example.project_02_exercise_app.database.entities.Strotta;\r\nimport com.example.project_02_exercise_app.database.entities.User;\r\nimport com.example.project_02_exercise_app.databinding.ActivityLandingBinding;\r\n\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\nimport java.util.Locale;\r\n\r\npublic class LandingActivity extends AppCompatActivity {\r\n\r\n    private static final String USER_ID_KEY = \"com.example.project_02_exercise_app.USER_ID_KEY\";\r\n    private ActivityLandingBinding binding;\r\n    private StrottaRepository repository;\r\n    private int userId;\r\n    private User user;\r\n\r\n    public static Intent landingActivityIntentFactory(Context context, int userId) {\r\n        Intent intent = new Intent(context, LandingActivity.class);\r\n        intent.putExtra(USER_ID_KEY, userId);\r\n        return intent;\r\n    }\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        binding = ActivityLandingBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n        Toolbar tb = findViewById(R.id.toolbar);\r\n        setSupportActionBar(tb);\r\n        repository = new StrottaRepository(getApplication());\r\n        userId = getIntent().getIntExtra(USER_ID_KEY, -1);\r\n\r\n        if (userId == -1) {\r\n            Toast.makeText(this, \"Error: No user ID received!\", Toast.LENGTH_SHORT).show();\r\n            finish();\r\n            return;\r\n        }\r\n\r\n        repository.getUserByUserId(userId)\r\n                .observe(this, u -> {\r\n                    this.user = u;\r\n                    invalidateOptionsMenu();\r\n                });\r\n\r\n        binding.landingCardioButton.setOnClickListener(v -> logExercise(\"Cardio\"));\r\n        binding.landingStrengthButton.setOnClickListener(v -> logExercise(\"Strength\"));\r\n        binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise(\"Calisthenics\"));\r\n        binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);\r\n        binding.landingAdminButton.setOnClickListener(v ->\r\n                Toast.makeText(this, \"Boss in the house! Admin Page!\", Toast.LENGTH_SHORT).show());\r\n    }\r\n\r\n    private void logExercise(String type) {\r\n        String duration = \"30 minutes\";  // or whatever you generate\r\n        int minutes = Integer.parseInt(duration.split(\" \")[0]);\r\n        Strotta log = new Strotta(userId, minutes);\r\n        repository.insertStrottaRepository(log);\r\n        Toast.makeText(this, type + \" logged!\", Toast.LENGTH_SHORT).show();\r\n    }\r\n    @Override\r\n    public boolean onCreateOptionsMenu(Menu menu) {\r\n        getMenuInflater().inflate(R.menu.logout_menu, menu);\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean onPrepareOptionsMenu(Menu menu) {\r\n        MenuItem item = menu.findItem(R.id.logoutMenuItem);\r\n        if(user != null){\r\n            item.setTitle(user.getUsername());\r\n        }else {\r\n            item.setTitle(\"Logout\");\r\n        }\r\n        return true;\r\n    }\r\n\r\n    @Override\r\n    public boolean onOptionsItemSelected(@NonNull MenuItem item) {\r\n        if (item.getItemId() == R.id.logoutMenuItem) {\r\n            showLogoutDialog();\r\n            return true;\r\n        }\r\n        return super.onOptionsItemSelected(item);\r\n    }\r\n    private void showLogoutDialog() {\r\n        new AlertDialog.Builder(this)\r\n                .setTitle(\"Logout?\")\r\n                .setMessage(\"Do you want to log out?\")\r\n                .setPositiveButton(\"Yes\", (dialog, which) -> logout())\r\n                .setNegativeButton(\"Cancel\", null)\r\n                .show();\r\n    }\r\n    private void logout() {\r\n        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);\r\n        prefs.edit().remove(getString(R.string.preference_userId_key)).apply();\r\n\r\n        Intent intent = new Intent(this, LoginActivity.class);\r\n        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);\r\n        startActivity(intent);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/LandingActivity.java b/app/src/main/java/com/example/project_02_exercise_app/LandingActivity.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/LandingActivity.java	(revision 81f28da30d7812a2796ff8868b5e66449720466b)
++++ b/app/src/main/java/com/example/project_02_exercise_app/LandingActivity.java	(date 1745475871379)
+@@ -1,10 +1,13 @@
+ package com.example.project_02_exercise_app;
+ 
++import static com.example.project_02_exercise_app.MainActivity.TAG;
++
+ import android.app.AlertDialog;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.view.View;
+@@ -13,6 +16,7 @@
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.appcompat.widget.Toolbar;
++import androidx.lifecycle.LiveData;
+ 
+ import com.example.project_02_exercise_app.database.StrottaRepository;
+ import com.example.project_02_exercise_app.database.entities.Strotta;
+@@ -28,9 +32,8 @@
+     private static final String USER_ID_KEY = "com.example.project_02_exercise_app.USER_ID_KEY";
+     private ActivityLandingBinding binding;
+     private StrottaRepository repository;
+-    private int userId;
++    private int userId = -1;
+     private User user;
+-
+     public static Intent landingActivityIntentFactory(Context context, int userId) {
+         Intent intent = new Intent(context, LandingActivity.class);
+         intent.putExtra(USER_ID_KEY, userId);
+@@ -42,35 +45,34 @@
+         super.onCreate(savedInstanceState);
+         binding = ActivityLandingBinding.inflate(getLayoutInflater());
+         setContentView(binding.getRoot());
+-        Toolbar tb = findViewById(R.id.toolbar);
+-        setSupportActionBar(tb);
++
++        setSupportActionBar(binding.toolbar);
+         repository = new StrottaRepository(getApplication());
++
+         userId = getIntent().getIntExtra(USER_ID_KEY, -1);
+-
+         if (userId == -1) {
+             Toast.makeText(this, "Error: No user ID received!", Toast.LENGTH_SHORT).show();
+             finish();
+             return;
+         }
+-
+-        repository.getUserByUserId(userId)
+-                .observe(this, u -> {
+-                    this.user = u;
+-                    invalidateOptionsMenu();
+-                });
+-
+         binding.landingCardioButton.setOnClickListener(v -> logExercise("Cardio"));
+         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
+         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
+-        binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
+         binding.landingAdminButton.setOnClickListener(v ->
+-                Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show());
++                Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show()
++        );
++        repository.getUserByUserId(userId).observe(this, u -> {
++                    if (u != null) {
++                        this.user = u;
++                        invalidateOptionsMenu();
++                    } else {
++                        Toast.makeText(this, "Error: user is invalid", Toast.LENGTH_SHORT).show();
++                    }
++        });
+     }
+ 
+     private void logExercise(String type) {
+-        String duration = "30 minutes";  // or whatever you generate
+-        int minutes = Integer.parseInt(duration.split(" ")[0]);
+-        Strotta log = new Strotta(userId, minutes);
++        Strotta log = new Strotta(userId, 30);
+         repository.insertStrottaRepository(log);
+         Toast.makeText(this, type + " logged!", Toast.LENGTH_SHORT).show();
+     }

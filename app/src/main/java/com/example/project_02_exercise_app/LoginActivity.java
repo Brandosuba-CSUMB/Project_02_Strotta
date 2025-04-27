@@ -38,32 +38,32 @@ public class LoginActivity extends AppCompatActivity {
         Intent  intent = new Intent(LoginActivity.this,SignupActivity.class);
         startActivity(intent);
     });
+
+
 }
     private void verifyUser(){
-        String username = binding.userNameLoginEditText.getText().toString();
+        String username = binding.userNameLoginEditText.getText().toString().trim();
+        String password = binding.passwordLoginEditText.getText().toString();
 
-        if(username.isEmpty()){
-            toastMaker("username should not be blank");
+        if (username.isEmpty()) {
+            toastMaker("Username should not be blank");
             return;
         }
+
         LiveData<User> userObserver = repository.getUserByUserName(username);
         userObserver.observe(this, user -> {
             if (user != null) {
-                String password = binding.passwordLoginEditText.getText().toString();
                 if (password.equals(user.getPassword())) {
-                    Intent intent;
-                    intent = LandingActivity.landingActivityIntentFactory(
-                            getApplicationContext(), user.getId());
-//                    if (user.isAdmin()) {
-//                        intent = LandingActivity.landingActivityIntentFactory(
-//                                getApplicationContext(), user.getId());
-//                    } else {
-//                        intent = MainActivity.mainActivityIntentFactory(
-//                                getApplicationContext(), user.getId());
-//                    }
-                    intent.setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    SharedPreferences prefs = getSharedPreferences(
+                            getString(R.string.preference_file_key), MODE_PRIVATE
                     );
+                    prefs.edit().putInt(getString(R.string.preference_userId_key), user.getId()).apply();
+
+                    Intent intent = user.isAdmin()
+                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
+                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 } else {

@@ -28,4 +28,6 @@
     <string name="logged_in">Logged in.</string>
     <string name="preference_userId_key">preference_userId_key</string>
     <string name="preference_file_key">preference_file_key</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_cardio">CardioActivity</string>
 </resources>
