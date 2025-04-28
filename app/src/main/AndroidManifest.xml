@@ -31,7 +31,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_GOOGLE_MAPS_KEY"/>
+            android:value="AIzaSyAjaIM2qUEfhlYZMlzZ89ISTAPtIOy0N8A"/>
 
         <service
             android:name=".tracking.CardioTrackingService"
