@@ -173,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
     private void logout() {
         loggedInUserId = LOGGED_OUT;
         updateSharedPreference();
-
-        getIntent().putExtra(MAIN_ACTIVITY_USER_ID,LOGGED_OUT);
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
 
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }

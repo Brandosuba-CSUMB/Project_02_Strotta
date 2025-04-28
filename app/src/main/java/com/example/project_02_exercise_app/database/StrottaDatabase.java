@@ -18,12 +18,13 @@ import com.example.project_02_exercise_app.database.typeConverters.LocalDateType
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {User.class, Strotta.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, Strotta.class}, version = 1, exportSchema = false)
 public abstract class StrottaDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";
     private static final String DATABASE_NAME = "StrottaDatabase";
     public static final String STROTTA_TABLE = "strottaTable";
+
 
     private static volatile StrottaDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -56,6 +57,7 @@ public abstract class StrottaDatabase extends RoomDatabase {
             databaseWriteExecution.execute(()->{
                 UserDAO dao = INSTANCE.userDAO();
                 dao.deleteAll();
+
                 User admin = new User("admin1","admin1");
                 admin.setAdmin(true);
                 dao.insert(admin);
@@ -69,4 +71,5 @@ public abstract class StrottaDatabase extends RoomDatabase {
     public abstract StrottaDAO strottaDAO();
 
     public abstract UserDAO userDAO();
+
 }

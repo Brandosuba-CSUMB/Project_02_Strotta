@@ -62,15 +62,16 @@ public class LandingActivity extends AppCompatActivity {
         }
 
         repository.getUserByUserId(userId).observe(this, u -> {
-            if( u == null){
-                return;
-            }
+            if (u == null) return;
+
+            this.user = u;
             invalidateOptionsMenu();
-            binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
-                });
+            binding.landingAdminButton.setVisibility(
+                    u.isAdmin() ? View.VISIBLE : View.INVISIBLE);
+        });
 
         binding.landingCardioButton.setOnClickListener(v ->
-                startActivity(ActivityCardio.cardioIntentFactory(this)));
+                startActivity(CardioActivity.cardioIntentFactory(this)));
 
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
