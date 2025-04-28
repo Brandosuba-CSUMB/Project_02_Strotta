@@ -25,6 +25,7 @@ public abstract class StrottaDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "StrottaDatabase";
     public static final String STROTTA_TABLE = "strottaTable";
 
+
     private static volatile StrottaDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
@@ -70,4 +71,5 @@ public abstract class StrottaDatabase extends RoomDatabase {
     public abstract StrottaDAO strottaDAO();
 
     public abstract UserDAO userDAO();
+
 }
