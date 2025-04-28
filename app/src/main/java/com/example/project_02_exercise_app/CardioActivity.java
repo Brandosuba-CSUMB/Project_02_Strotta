@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,6 +44,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
     private long startRealtime = 0L;
     private float distM = 0f;
     private TextView timeTv, distTv, paceTv;
+    private Location lastKnown = null;
 
     private final ActivityResultLauncher<String[]> permissions =
             registerForActivityResult(
@@ -57,6 +59,9 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             updateStatsUI();
 
             if (l == null || mMap == null) return;
+
+            lastKnown = l;
+
             LatLng p = new LatLng(l.getLatitude(), l.getLongitude());
 
             if (trail == null)
@@ -94,15 +99,26 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             if (mMap != null) mMap.animateCamera(CameraUpdateFactory.zoomOut());
         });
 
+        center.setOnClickListener(v ->{
+            if(mMap!=null&& lastKnown !=null){
+                LatLng p = new LatLng(lastKnown.getLatitude(),lastKnown.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(p));
+                    //permissions.launch(new String[]{
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACTIVITY_RECOGNITION
+            };
+        });
+
         SupportMapFragment mf = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
         mf.getMapAsync(this);
 
-        binding.recordBtn.setOnClickListener(v ->
-                permissions.launch(new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACTIVITY_RECOGNITION
-                }));
+        binding.recordBtn.setOnClickListener(v -> {
+                    permissions.launch(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACTIVITY_RECOGNITION
+                });
+        });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
     }
@@ -158,6 +174,8 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         trail = null;
         binding.statsBar.removeCallbacks(tick);
         startRealtime = 0L;
+
+
     }
 
     private void updateStatsUI() {
