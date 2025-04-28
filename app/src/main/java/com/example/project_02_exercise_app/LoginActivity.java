@@ -59,9 +59,10 @@ public class LoginActivity extends AppCompatActivity {
                     );
                     prefs.edit().putInt(getString(R.string.preference_userId_key), user.getId()).apply();
 
-                    Intent intent = user.isAdmin()
-                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
-                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
+                    Intent intent = LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId());
+//                    Intent intent = user.isAdmin()
+//                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
+//                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
