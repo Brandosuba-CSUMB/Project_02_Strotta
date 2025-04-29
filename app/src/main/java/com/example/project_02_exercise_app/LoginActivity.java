@@ -37,10 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     signup.setOnClickListener(v ->{
         Intent  intent = new Intent(LoginActivity.this,SignupActivity.class);
         startActivity(intent);
-    });
-
-
-}
+        });
+    }
     private void verifyUser(){
         String username = binding.userNameLoginEditText.getText().toString().trim();
         String password = binding.passwordLoginEditText.getText().toString();
@@ -85,4 +83,5 @@ public class LoginActivity extends AppCompatActivity {
     public static Intent loginIntentFactory(Context context){
         return new Intent(context, LoginActivity.class );
     }
+
 }

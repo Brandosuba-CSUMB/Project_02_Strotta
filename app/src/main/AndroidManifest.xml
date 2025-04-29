@@ -37,7 +37,7 @@
             android:name=".tracking.CardioTrackingService"
             android:exported="false"
             android:foregroundServiceType="location|health"/>
-
+        <activity android:name=".CardioLogActivity"/>
         <activity android:name=".CardioActivity"/>
         <activity android:name=".SignupActivity"/>
         <activity android:name=".LoginActivity"
