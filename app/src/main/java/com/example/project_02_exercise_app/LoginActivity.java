@@ -24,6 +24,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
+
+        SharedPreferences prefs = getSharedPreferences(getString((R.string.preference_file_key)),MODE_PRIVATE);
+        int userId = prefs.getInt(getString(R.string.preference_userId_key),-1);
+
+        if(userId != -1){
+            Intent intent = LandingActivity.landingActivityIntentFactory(this,userId);
+            startActivity(intent);
+            finish();
+            return;
+        }
         setContentView(binding.getRoot());
         repository = StrottaRepository.getRepository(getApplication());
 
