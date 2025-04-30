@@ -96,6 +96,7 @@ public class LandingActivity extends AppCompatActivity {
         if (userId == LOGGED_OUT) {
             return;
         }
+
         LiveData<User> userObserver = repository.getUserByUserId(userId);
         userObserver.observe(this, user -> {
             this.user = user;
