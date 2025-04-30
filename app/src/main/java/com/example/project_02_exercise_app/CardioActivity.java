@@ -33,6 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.project_02_exercise_app.CardioLogActivity;
 
 public class CardioActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -162,6 +163,18 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         stopService(new Intent(this,CardioTrackingService.class)
                 .setAction(CardioTrackingService.ACTION_STOP));
 
+
+        float pace = 0f;
+        if(distM>0){
+            pace = (elapsedMs/1000f)/(distM/1000f);
+            pace /= 60f;
+        }
+        Intent logIntent = new Intent(this, CardioLogActivity.class);
+        logIntent.putExtra("duration_ms",elapsedMs);
+        logIntent.putExtra("distance_m",distM);
+        logIntent.putExtra("pace_min_per_km",pace);
+        startActivity(logIntent);
+
         /* reset UI */
         binding.recordBtn.setEnabled(true);
         binding.stopBtn.setEnabled(false);
@@ -174,6 +187,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         trail = null;
         binding.statsBar.removeCallbacks(tick);
         startRealtime = 0L;
+
 
 
     }

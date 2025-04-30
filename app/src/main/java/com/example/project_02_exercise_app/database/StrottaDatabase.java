@@ -11,6 +11,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_02_exercise_app.MainActivity;
+import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.database.typeConverters.LocalDateTypeConverter;
@@ -18,7 +19,8 @@ import com.example.project_02_exercise_app.database.typeConverters.LocalDateType
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {User.class, Strotta.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Strotta.class, Run.class}, version = 2, exportSchema = false)
+
 public abstract class StrottaDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";
@@ -31,7 +33,7 @@ public abstract class StrottaDatabase extends RoomDatabase {
 
     static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static StrottaDatabase getDatabase(final Context context){
+    public static StrottaDatabase getDatabase(final Context context){
         if (INSTANCE == null) {
             synchronized (StrottaDatabase.class){
                 if(INSTANCE == null){
@@ -71,5 +73,6 @@ public abstract class StrottaDatabase extends RoomDatabase {
     public abstract StrottaDAO strottaDAO();
 
     public abstract UserDAO userDAO();
+    public abstract RunDAO runDAO();
 
 }

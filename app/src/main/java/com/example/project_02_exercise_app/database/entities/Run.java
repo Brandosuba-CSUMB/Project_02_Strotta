@@ -13,11 +13,9 @@ public class Run {
     private String path;
     private long timeStamp;
 
-    public Run(int id, float distantMeters, long totalTime, String path, long timeStamp) {
-        this.id = id;
+    public Run(float distantMeters, long totalTime, long timeStamp) {
         this.distantMeters = distantMeters;
         this.totalTime = totalTime;
-        this.path = path;
         this.timeStamp = timeStamp;
     }
 
