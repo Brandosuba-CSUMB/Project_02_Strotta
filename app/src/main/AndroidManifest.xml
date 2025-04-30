@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH"/>
 
 
+
     <uses-permission android:name="android.permission.health.READ_WRITE_HEALTH_DATA"/>
 
     <application
@@ -40,6 +41,8 @@
         <activity android:name=".CardioLogActivity"/>
         <activity android:name=".CardioActivity"/>
         <activity android:name=".SignupActivity"/>
+
+
         <activity android:name=".LoginActivity"
             android:exported="true">
         <intent-filter>
@@ -49,6 +52,7 @@
         </activity>
 
         <activity android:name=".LandingActivity"/>
+
         <activity android:name=".MainActivity"
             android:exported="false"/>
     </application>
