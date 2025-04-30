@@ -103,7 +103,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             if(mMap!=null&& lastKnown !=null){
                 LatLng p = new LatLng(lastKnown.getLatitude(),lastKnown.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(p));
-                    //permissions.launch(new String[]{
+                //permissions.launch(new String[]{
 //                    Manifest.permission.ACCESS_FINE_LOCATION,
 //                    Manifest.permission.ACTIVITY_RECOGNITION
             };
@@ -114,10 +114,10 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         mf.getMapAsync(this);
 
         binding.recordBtn.setOnClickListener(v -> {
-                    permissions.launch(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACTIVITY_RECOGNITION
-                });
+            permissions.launch(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+            });
         });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
