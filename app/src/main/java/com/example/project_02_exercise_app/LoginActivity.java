@@ -59,19 +59,16 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         LiveData<User> userObserver = repository.getUserByUserName(username);
-        userObserver.observe(this, user -> {
-            if (user != null) {
-                if (password.equals(user.getPassword())) {
+        LiveData<User> userLiveData = repository.getUserByUserName(username);
+        obsOnce(userLiveData, user ->{
+            if(user !=null){
+                if(password.equals(user.getPassword())){
                     SharedPreferences prefs = getSharedPreferences(
                             getString(R.string.preference_file_key), MODE_PRIVATE
                     );
                     prefs.edit().putInt(getString(R.string.preference_userId_key), user.getId()).apply();
 
                     Intent intent = LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId());
-//                    Intent intent = user.isAdmin()
-//                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
-//                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
-
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
@@ -84,8 +81,41 @@ public class LoginActivity extends AppCompatActivity {
                 binding.userNameLoginEditText.setSelection(0);
             }
         });
+//        userObserver.observe(this, user -> {
+//            if (user != null) {
+//                if (password.equals(user.getPassword())) {
+//                    SharedPreferences prefs = getSharedPreferences(
+//                            getString(R.string.preference_file_key), MODE_PRIVATE
+//                    );
+//                    prefs.edit().putInt(getString(R.string.preference_userId_key), user.getId()).apply();
+//
+//                    Intent intent = LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId());
+////                    Intent intent = user.isAdmin()
+////                            ? LandingActivity.landingActivityIntentFactory(getApplicationContext(), user.getId())
+////                            : MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
+//
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    toastMaker("Invalid password");
+//                    binding.passwordLoginEditText.setSelection(0);
+//                }
+//            } else {
+//                toastMaker(username + " is not a valid username.");
+//                binding.userNameLoginEditText.setSelection(0);
+//            }
+//        });
     }
-
+    private <T> void obsOnce(final LiveData<T> liveData, final androidx.lifecycle.Observer<T> observer){
+        liveData.observe(this,new androidx.lifecycle.Observer<T>(){
+            @Override
+            public void onChanged(T t){
+                liveData.removeObserver(this);
+                observer.onChanged(t);
+            }
+        });
+    }
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
