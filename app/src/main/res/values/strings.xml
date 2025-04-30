@@ -34,4 +34,10 @@
     <string name="time">Time:</string>
     <string name="pace">Pace:</string>
     <string name="log_run">Log Run</string>
+    <string name="exercise">Exercise</string>
+    <string name="enter_an_exercise">Enter an exercise</string>
+    <string name="weight">Weight</string>
+    <string name="enter_a_weight">Enter a body weight</string>
+    <string name="reps">Reps</string>
+    <string name="enter_reps">Enter reps</string>
 </resources>
