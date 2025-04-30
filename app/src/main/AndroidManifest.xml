@@ -40,6 +40,8 @@
         <activity android:name=".CardioLogActivity"/>
         <activity android:name=".CardioActivity"/>
         <activity android:name=".SignupActivity"/>
+
+
         <activity android:name=".LoginActivity"
             android:exported="true">
         <intent-filter>

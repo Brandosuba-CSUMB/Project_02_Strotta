@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,7 +32,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.example.project_02_exercise_app.CardioLogActivity;
 
 public class CardioActivity extends FragmentActivity implements OnMapReadyCallback {
 
