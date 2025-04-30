@@ -54,5 +54,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+    <ScrollView
+        android:id="@+id/log_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/log_btn">
+
+        <TextView
+            android:id="@+id/log_history_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:text="Logged Runs:\n"
+            android:textSize="16sp" />
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

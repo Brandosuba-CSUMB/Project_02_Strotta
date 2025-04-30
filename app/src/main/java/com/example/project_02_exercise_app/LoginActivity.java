@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        LiveData<User> userObserver = repository.getUserByUserName(username);
+        //LiveData<User> userObserver = repository.getUserByUserName(username);
         LiveData<User> userLiveData = repository.getUserByUserName(username);
         obsOnce(userLiveData, user ->{
             if(user !=null){
