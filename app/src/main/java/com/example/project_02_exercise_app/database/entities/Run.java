@@ -10,7 +10,6 @@ public class Run {
 
     private float distantMeters;
     private long totalTime;
-    private String path;
     private long timeStamp;
 
     public Run(float distantMeters, long totalTime, long timeStamp) {
@@ -41,14 +40,6 @@ public class Run {
 
     public void setTotalTime(long totalTime) {
         this.totalTime = totalTime;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public long getTimeStamp() {
