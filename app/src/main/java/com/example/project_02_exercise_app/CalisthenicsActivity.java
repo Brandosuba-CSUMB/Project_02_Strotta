@@ -23,7 +23,7 @@ public class CalisthenicsActivity extends FragmentActivity {
     private long startRealTime = 0;
 
     private long elapsedMs = 0;
-
+    private int userId = -1;
     private TextView timeTv;
 
     private final ActivityResultLauncher<String[]> permissions =
@@ -35,9 +35,8 @@ public class CalisthenicsActivity extends FragmentActivity {
         super.onCreate(s);
         binding = ActivityCalisthenicsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        timeTv = binding.timeTv;
-
+        userId = getIntent().getIntExtra("uid", -1);
+        timeTv = findViewById(R.id.timeTv);
         binding.recordBtn.setOnClickListener(v -> {
             permissions.launch(new String[]{
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -79,8 +78,9 @@ public class CalisthenicsActivity extends FragmentActivity {
                 .setAction(CardioTrackingService.ACTION_STOP));
 
 
-        Intent logIntent = new Intent(this, CardioLogActivity.class);
-        logIntent.putExtra("duration_ms",elapsedMs);
+        Intent logIntent = new Intent(this, CalisthenicsLogActivity.class)
+                .putExtra("duration_ms",elapsedMs)
+                .putExtra("uid", userId);
         startActivity(logIntent);
 
         /* reset UI */
@@ -110,8 +110,8 @@ public class CalisthenicsActivity extends FragmentActivity {
         }
     };
 
-    public static Intent calisthenicsIntentFactory(Context c){
-        return new Intent(c, CalisthenicsActivity.class);
+    public static Intent calisthenicsIntentFactory(Context c, int uid){
+        return new Intent(c, CalisthenicsActivity.class).putExtra("uid", uid);
     }
 
 

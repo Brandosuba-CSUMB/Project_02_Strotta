@@ -56,7 +56,7 @@
         android:layout_width="273dp"
         android:layout_height="39dp"
         android:layout_marginStart="8dp"
-        android:hint="@string/enter_weight"
+        android:hint="Weight"
         android:inputType="number|numberDecimal"
         android:padding="8dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/weightLabelTextView"
@@ -85,7 +85,7 @@
 
     <Button
         android:id="@+id/log_btn"
-        android:text="@string/log_workout"
+        android:text="Log!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
