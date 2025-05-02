@@ -71,11 +71,11 @@ public class LandingActivity extends AppCompatActivity {
         });
 
         binding.landingCardioButton.setOnClickListener(v ->
-                startActivity(CardioActivity.cardioIntentFactory(this )));
+                startActivity(CardioActivity.cardioIntentFactory(this)));
+        binding.landingCalisthenicsButton.setOnClickListener(v ->
+                startActivity(CalisthenicsActivity.calisthenicsIntentFactory(this, userId)));
 
-        binding.landingStrengthButton.setOnClickListener(v ->
-                startActivity(StrengthActivity.strengthIntentFactory(this )));
-        binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
+        binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
        // binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
         binding.landingAdminButton.setOnClickListener(v ->
                 startActivity(new Intent(this, AdminActivity.class)));
