@@ -37,33 +37,24 @@ public class SignupActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void createAccount(){
+    private void createAccount() {
         String user = binding.usernameEditText.getText().toString();
         String pass = binding.passwordEditText.getText().toString();
         String pass2 = binding.confirmPasswordEditText.getText().toString();
-        if(user.isEmpty()||pass.isEmpty()){
+        if (user.isEmpty() || pass.isEmpty()) {
             toastMaker("Username and password cannot be empty");
             return;
         }
-        if(!pass.equals(pass2)){
+        if (!pass.equals(pass2)) {
             toastMaker("The password is not the same!");
             return;
         }
-        obsOnce(repository.getUserByUserName(user),this, existingUser ->{
-            if (existingUser != null){
-                toastMaker("UserName already taken");
-            }else{
-                User newUser = new User(user,pass);
-                repository.insertUser(newUser);
-                toastMaker("User is now made!");
-//                obsOnce(repository.getUserByUserName(user),this, insertedUser->{
-//                   if(insertedUser !=null){
-//                       Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(),insertedUser.getId());
-//                       startActivity(intent);
-//                   }
-//                });
-            }
-        });
+        User newUser = new User(user,pass);
+        long uid = repository.insertUserSync(newUser);
+        getSharedPreferences(getString(R.string.preference_file_key),MODE_PRIVATE).edit().
+                putInt(getString(R.string.preference_userId_key),(int) uid).apply();
+
+        startActivity(LandingActivity.landingActivityIntentFactory(this, (int) uid));
     }
     private void toastMaker(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

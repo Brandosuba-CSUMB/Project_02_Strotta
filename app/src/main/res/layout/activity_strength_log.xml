@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"
-        android:textColor="#FFFF"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +25,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/exercise"
-        android:textColor="#FFFF"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/time_tv" />
@@ -52,7 +47,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/weight"
-        android:textColor="#FFFF"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exerciseLabelTextView" />
@@ -62,22 +56,44 @@
         android:layout_width="273dp"
         android:layout_height="39dp"
         android:layout_marginStart="8dp"
-        android:hint="@string/enter_a_weight"
+        android:hint="@string/enter_weight"
         android:inputType="number|numberDecimal"
         android:padding="8dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/weightLabelTextView"
         app:layout_constraintStart_toEndOf="@+id/weightLabelTextView" />
 
+    <TextView
+        android:id="@+id/repsLabelTextView"
+        android:layout_width="100dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Reps"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightLabelTextView" />
+    <EditText
+        android:id="@+id/repsInputEditTextView"
+        android:layout_width="273dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:hint="Enter reps"
+        android:inputType="number|numberDecimal"
+        android:padding="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/repsLabelTextView"
+        app:layout_constraintStart_toEndOf="@+id/repsLabelTextView" />
+
     <Button
         android:id="@+id/log_btn"
+        android:text="@string/log_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/log_run"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <ScrollView
         android:id="@+id/log_scroll"
@@ -94,20 +110,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:text="Logged Runs:\n"
-            android:textColor="#FFFF"
+            android:text="Logged Workouts:\n"
             android:textSize="16sp" />
     </ScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/calisthenics_recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/log_btn"
-        tools:listitem="@layout/strotta_recycler_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

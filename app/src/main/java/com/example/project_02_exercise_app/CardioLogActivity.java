@@ -2,21 +2,31 @@ package com.example.project_02_exercise_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_02_exercise_app.database.StrottaDAO;
 import com.example.project_02_exercise_app.database.StrottaDatabase;
+import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Run;
+import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 public class CardioLogActivity extends AppCompatActivity {
     private float distance;
     private long elapsed;
+    private int userId;
     private TextView logHistoryTextView;
 
     @Override
@@ -24,45 +34,57 @@ public class CardioLogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardio_log);
 
-        TextView distanceTv = findViewById(R.id.distance_tv);
+        Intent i = getIntent();
+        userId = i.getIntExtra("uid", -1);
+        distance = getIntent().getFloatExtra("distance_m", 0f);
+        elapsed  = getIntent().getLongExtra ("duration_ms", 0L);
+
+        TextView distTv = findViewById(R.id.distance_tv);
         TextView timeTv = findViewById(R.id.time_tv);
         TextView paceTv = findViewById(R.id.pace_tv);
-        Button logBtn = findViewById(R.id.log_btn);
-        logHistoryTextView = findViewById(R.id.log_history_tv);
+        Button   logBtn = findViewById(R.id.log_btn);
 
-        distance = getIntent().getFloatExtra("distance_m",0f);
-        elapsed = getIntent().getLongExtra("duration_ms",0);
+        distTv.setText(String.format(Locale.US, "%.2f km", distance / 1000f));
 
-        long s = elapsed / 1000;
-        long mm = (s%3600) / 60;
-        long hh = s/ 3600;
-        long ss = s%60;
+        long secs = elapsed / 1000;
+        long mm   = (secs % 3600) / 60;
+        long ss   = secs % 60;
+        timeTv.setText(
+                String.format(Locale.US, "%02d:%02d", mm, ss));
 
-        String timeStr = hh > 0 ? String.format("%d:%02d:%02d",hh,mm,ss) : String.format("%02d:%02d",mm,ss);
-
-        float paceSec = (elapsed/1000f)/(distance/1000f);
-        int pMin = (int) (paceSec/60);
-        int pSec = Math.round(paceSec) % 60;
-        String paceStr = distance>20 ? String.format("%d:%02d min/km",pMin,pSec) : "- min/km";
-
-        distanceTv.setText(String.format("%.2f km",distance/1000f));
-        timeTv.setText(timeStr);
-        paceTv.setText(paceStr);
-
-        loadRuns();
+        float pace = distance > 0
+                ? (elapsed/1000f) / (distance/1000f)
+                : 0;
+        int   pMin = (int) pace / 60;
+        int   pSec = Math.round(pace) % 60;
+        paceTv.setText(
+                String.format(Locale.US, "%d:%02d min/km", pMin, pSec));
 
         logBtn.setOnClickListener(v -> {
-            Run run = new Run(distance,elapsed,System.currentTimeMillis());
-
-            Executors.newSingleThreadExecutor().execute(() -> {
-                StrottaDatabase.getDatabase(getApplicationContext()).runDAO().insert(run);
-                runOnUiThread(() -> {
-                    appendRunToHistory(run);
-                });
-            });
+            finish();
         });
+        if (userId == -1) {
+            SharedPreferences prefs = getSharedPreferences(
+                    getString(R.string.preference_file_key), MODE_PRIVATE);
+            userId = prefs.getInt(   getString(R.string.preference_userId_key), -1);
+        }
+        if (userId == -1) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.run_recycler);
+        StrottaAdapter adapter = new StrottaAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
+        repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
 
     }
+
     private void loadRuns() {
         StrottaDatabase.getDatabase(getApplicationContext()).runDAO().getAllRuns()
                 .observe(this, runs -> {
@@ -88,7 +110,12 @@ public class CardioLogActivity extends AppCompatActivity {
         long ss = totalSeconds % 60;
         String timeStr = hh>0 ?
                 String.format("%d:%02d:%02d",hh,mm,ss) : String.format("%02d:%02d",mm,ss);
-        return String.format("* %.2f km| %s",km,timeStr);
+
+        float pace = (ms/1000f) / km;
+        int pMin = (int) (pace / 60);
+        int pSec = Math.round(pace) % 60;
+        String paceStr = String.format("%d:%02d min/km",pMin,pSec);
+        return String.format("* %.2f km | %s | %s",km,timeStr,paceStr);
     }
     public static Intent cardioRunIntentFactory(Context context, float distM,long elaspedMs){
         return new Intent(context,CardioLogActivity.class).putExtra("DISTANCE",distM).putExtra("ELAPSED",elaspedMs);

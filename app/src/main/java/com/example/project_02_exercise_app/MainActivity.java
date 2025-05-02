@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = com.example.project_02_exercise_app.databinding.ActivityMainBinding.inflate(getLayoutInflater());
+        repository = StrottaRepository.getRepository(getApplication());
+        loginUser(savedInstanceState);
         setContentView(binding.getRoot());
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -54,18 +57,16 @@ public class MainActivity extends AppCompatActivity {
         strottaViewModel = new ViewModelProvider(this, factory)
                 .get(StrottaViewModel.class);
 
-        RecyclerView recyclerView = binding.logDisplayRecyclerView;
-        final StrottaAdapter adapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final StrottaAdapter adapter = new StrottaAdapter();
+        RecyclerView rv = findViewById(R.id.logDisplayRecyclerView);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
 
-
-        repository = StrottaRepository.getRepository(getApplication());
-        loginUser(savedInstanceState);
-
-        strottaViewModel.getAllLogsById(loggedInUserId).observe(this, strottas -> {
-            adapter.submitList(strottas);
-        });
+        /* observe once we know who is signed-in */
+        strottaViewModel.getAllLogsById(loggedInUserId)
+                .observe(this, adapter::submitList);
         if(loggedInUserId == -1){
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
@@ -87,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
         if(cardio == 0){
             return;
         }
-        Strotta strotta = new Strotta(cardio, loggedInUserId);
-        repository.insertStrottaRepository(strotta);
+        strottaViewModel.insert(new Strotta(loggedInUserId, cardio));
     }
 
     private void getInformationFromDisplay() {

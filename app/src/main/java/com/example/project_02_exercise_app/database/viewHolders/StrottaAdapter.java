@@ -10,27 +10,30 @@ import com.example.project_02_exercise_app.database.entities.Strotta;
 
 
 public class StrottaAdapter extends ListAdapter<Strotta, StrottaViewHolder> {
-    public StrottaAdapter(DiffUtil.ItemCallback<Strotta> diffCallback){
-        super(diffCallback);
+    public StrottaAdapter() {
+        super(StrottaDiff);
     }
-    @NonNull
+
     @Override
-    public StrottaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public StrottaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return StrottaViewHolder.create(parent);
     }
+
     @Override
-    public void onBindViewHolder(@NonNull StrottaViewHolder holder, int position){
-        Strotta current = getItem(position);
-        holder.bind(current.toString());
+    public void onBindViewHolder(@NonNull StrottaViewHolder holder, int position) {
+        holder.bind(getItem(position));
     }
-    public static class StrottaDiff extends DiffUtil.ItemCallback<Strotta>{
-        @Override
-        public boolean areItemsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem){
-            return oldItem == newItem;
-        }
-        @Override
-        public boolean areContentsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem){
-            return oldItem.equals(newItem);
-        }
-    }
+
+    private static final DiffUtil.ItemCallback<Strotta> StrottaDiff =
+            new DiffUtil.ItemCallback<Strotta>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem) {
+                    return oldItem.getCardio() == newItem.getCardio();
+                }
+                @Override
+                public boolean areContentsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }
+
