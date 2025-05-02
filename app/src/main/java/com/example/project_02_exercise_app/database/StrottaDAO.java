@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.entities.User;
 
 import java.util.List;
 
@@ -14,12 +15,8 @@ import java.util.List;
 public interface StrottaDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Strotta strotta);
-    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " ORDER BY date DESC")
-    List<Strotta> getAllRecords();
 
     @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
-    List<Strotta> getRecordsByUserId(int loggedInUserId);
+    LiveData<List<Strotta>> getRecordsByUserId(int loggedInUserId);
 
-    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
-    LiveData<List<Strotta>> getRecordsByUserIdLiveData(int loggedInUserId);
 }

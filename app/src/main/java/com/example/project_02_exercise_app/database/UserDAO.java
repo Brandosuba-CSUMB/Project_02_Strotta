@@ -17,6 +17,9 @@ public interface UserDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(User... user);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+   long insertOne(User user);
+
     @Delete
     void delete(User user);
 
@@ -31,5 +34,8 @@ public interface UserDAO {
 
     @Query("SELECT * from " + StrottaDatabase.USER_TABLE + " WHERE id == :userId")
     LiveData<User> getUserByUserId(int userId);
+
+    @Query("SELECT * FROM " + StrottaDatabase.USER_TABLE + " WHERE username = :u AND password = :p LIMIT 1")
+    LiveData<User> authenticate (String u, String p);
 }
 
