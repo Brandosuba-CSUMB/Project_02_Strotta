@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -19,6 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.example.project_02_exercise_app.database.StrottaDatabase;
+import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.project_02_exercise_app.CardioLogActivity;
 
 public class CardioActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -44,6 +49,8 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
     private float distM = 0f;
     private TextView timeTv, distTv, paceTv;
     private Location lastKnown = null;
+    private Strotta id;
+
 
     private final ActivityResultLauncher<String[]> permissions =
             registerForActivityResult(
@@ -102,7 +109,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             if(mMap!=null&& lastKnown !=null){
                 LatLng p = new LatLng(lastKnown.getLatitude(),lastKnown.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(p));
-                //permissions.launch(new String[]{
+                    //permissions.launch(new String[]{
 //                    Manifest.permission.ACCESS_FINE_LOCATION,
 //                    Manifest.permission.ACTIVITY_RECOGNITION
             };
@@ -113,10 +120,10 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         mf.getMapAsync(this);
 
         binding.recordBtn.setOnClickListener(v -> {
-            permissions.launch(new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACTIVITY_RECOGNITION
-            });
+                    permissions.launch(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACTIVITY_RECOGNITION
+                });
         });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
@@ -158,8 +165,15 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
     }
 
     private void stopRecording(){
-        stopService(new Intent(this,CardioTrackingService.class)
-                .setAction(CardioTrackingService.ACTION_STOP));
+        SharedPreferences prefs = getSharedPreferences(
+                getString(R.string.preference_file_key), MODE_PRIVATE);
+        int userId = prefs.getInt(getString(R.string.preference_userId_key), -1);
+
+        Intent log = new Intent(this, CardioLogActivity.class)
+                .putExtra("uid",          userId)
+                .putExtra("distance_m",   distM)
+                .putExtra("duration_ms",  elapsedMs);
+        startActivity(log);
 
 
         float pace = 0f;
@@ -167,11 +181,11 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             pace = (elapsedMs/1000f)/(distM/1000f);
             pace /= 60f;
         }
-        Intent logIntent = new Intent(this, CardioLogActivity.class);
-        logIntent.putExtra("duration_ms",elapsedMs);
-        logIntent.putExtra("distance_m",distM);
-        logIntent.putExtra("pace_min_per_km",pace);
-        startActivity(logIntent);
+        double km = distM / 1000.0;
+
+        int seconds = (int) (elapsedMs /1000);
+        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
+        repository.insertStrottaRepository(new Strotta(userId, km, seconds));
 
         /* reset UI */
         binding.recordBtn.setEnabled(true);
