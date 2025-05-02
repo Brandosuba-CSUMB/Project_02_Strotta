@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -103,7 +102,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
             if(mMap!=null&& lastKnown !=null){
                 LatLng p = new LatLng(lastKnown.getLatitude(),lastKnown.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(p));
-                    //permissions.launch(new String[]{
+                //permissions.launch(new String[]{
 //                    Manifest.permission.ACCESS_FINE_LOCATION,
 //                    Manifest.permission.ACTIVITY_RECOGNITION
             };
@@ -114,10 +113,10 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         mf.getMapAsync(this);
 
         binding.recordBtn.setOnClickListener(v -> {
-                    permissions.launch(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACTIVITY_RECOGNITION
-                });
+            permissions.launch(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+            });
         });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
@@ -162,6 +161,18 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         stopService(new Intent(this,CardioTrackingService.class)
                 .setAction(CardioTrackingService.ACTION_STOP));
 
+
+        float pace = 0f;
+        if(distM>0){
+            pace = (elapsedMs/1000f)/(distM/1000f);
+            pace /= 60f;
+        }
+        Intent logIntent = new Intent(this, CardioLogActivity.class);
+        logIntent.putExtra("duration_ms",elapsedMs);
+        logIntent.putExtra("distance_m",distM);
+        logIntent.putExtra("pace_min_per_km",pace);
+        startActivity(logIntent);
+
         /* reset UI */
         binding.recordBtn.setEnabled(true);
         binding.stopBtn.setEnabled(false);
@@ -174,6 +185,7 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         trail = null;
         binding.statsBar.removeCallbacks(tick);
         startRealtime = 0L;
+
 
 
     }
