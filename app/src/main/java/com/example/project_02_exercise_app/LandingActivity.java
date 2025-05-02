@@ -109,7 +109,8 @@ public class LandingActivity extends AppCompatActivity {
     private void logExercise(String type) {
         String duration = "30 minutes";  // or whatever you generate
         int minutes = Integer.parseInt(duration.split(" ")[0]);
-        Strotta log = new Strotta(userId, minutes);
+        double kilometers = 0.0;
+        Strotta log = new Strotta(userId,kilometers, minutes);
         repository.insertStrottaRepository(log);
         Toast.makeText(this, type + " logged!", Toast.LENGTH_SHORT).show();
     }

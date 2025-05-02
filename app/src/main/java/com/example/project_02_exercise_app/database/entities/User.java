@@ -1,13 +1,15 @@
 package com.example.project_02_exercise_app.database.entities;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.project_02_exercise_app.database.StrottaDatabase;
 
 import java.util.Objects;
 
-@Entity(tableName = StrottaDatabase.USER_TABLE)
+@Entity(tableName = StrottaDatabase.USER_TABLE, indices =  @Index( value = "username", unique = true))
+
 public class User {
 
     @PrimaryKey(autoGenerate = true)

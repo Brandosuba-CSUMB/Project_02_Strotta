@@ -18,14 +18,12 @@ import java.util.concurrent.Future;
 public class StrottaRepository {
     public final StrottaDAO strottaDAO;
     private final UserDAO userDAO;
-    private ArrayList<Strotta> allLogs;
     private static StrottaRepository repository;
 
     public StrottaRepository(Application application) {
         StrottaDatabase db = StrottaDatabase.getDatabase(application);
         this.strottaDAO = db.strottaDAO();
         this.userDAO = db.userDAO();
-        this.allLogs = new ArrayList<>();
     }
 
     public static synchronized StrottaRepository getRepository(Application application) {
@@ -37,23 +35,6 @@ public class StrottaRepository {
 
     public static void setRepository(StrottaRepository repository) {
         StrottaRepository.repository = repository;
-    }
-
-    public ArrayList<Strotta> getAllLogs() {
-        Future<ArrayList<Strotta>> future = StrottaDatabase.databaseWriteExecution.submit(
-                new Callable<ArrayList<Strotta>>() {
-                    @Override
-                    public ArrayList<Strotta> call() throws Exception {
-                        return (ArrayList<Strotta>) strottaDAO.getAllRecords();
-                    }
-                }
-        );
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.i(MainActivity.TAG, "Problem when getting all GymLogs in the repository");
-        }
-        return null;
     }
 
     public void insertStrottaRepository(Strotta strotta) {
@@ -76,26 +57,21 @@ public class StrottaRepository {
         return userDAO.getUserByUserId(userId);
     }
 
-    public LiveData<List<Strotta>> getAllLogsByUserIdLiveData(int loggedInUserId) {
-        return strottaDAO.getRecordsByUserIdLiveData(loggedInUserId);
+    public LiveData<List<Strotta>> getAllLogsByUserId(int loggedInUserId) {
+        return strottaDAO.getRecordsByUserId(loggedInUserId);
     }
 
-    @Deprecated
-    public ArrayList<Strotta> getAllLogsByUserId(int loggedInUserId) {
-        Future<ArrayList<Strotta>> future = StrottaDatabase.databaseWriteExecution.submit(
-                new Callable<ArrayList<Strotta>>() {
-                    @Override
-                    public ArrayList<Strotta> call() throws Exception {
-                        return (ArrayList<Strotta>) strottaDAO.getRecordsByUserId(loggedInUserId);
-                    }
-                }
-        );
+    public long insertUserSync(User u) {
+        Future<Long> f = StrottaDatabase.databaseWriteExecution.submit(
+                () -> userDAO.insertOne(u));
         try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.i(MainActivity.TAG, "Problem when getting all GymLogs in the repository");
+            return f.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return null;
+    }
 
+    public LiveData<User> login(String u, String p) {
+        return userDAO.authenticate(u, p);
     }
 }

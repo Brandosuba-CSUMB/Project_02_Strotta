@@ -1,6 +1,9 @@
 package com.example.project_02_exercise_app.database.entities;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.project_02_exercise_app.LoginActivity;
@@ -10,34 +13,43 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-@Entity(tableName = StrottaDatabase.STROTTA_TABLE)
+@Entity(tableName = StrottaDatabase.STROTTA_TABLE, foreignKeys = @ForeignKey(
+        entity = User.class,
+        parentColumns = "id",
+        childColumns = "userId",
+        onDelete = ForeignKey.CASCADE
+),
+indices = @Index("userId"))
 public class Strotta {
     @PrimaryKey(autoGenerate = true)
-    private int id;
     private int cardio;
-
     private int userId;
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
+    private double distanceKm;
+    private int seconds;
 
-    public Strotta(int userId, int cardio) {
-        this.userId = userId;
-        this.cardio = cardio;
-        date = LocalDateTime.now();
+    @Ignore                                    // ← tell Room to ignore this one
+    public Strotta(int userId, int cardioMin) {
+        this.userId     = userId;
+        this.distanceKm = 0;                   // unknown
+        this.seconds    = cardioMin * 60;      // at least duration is correct
+    }
+
+    /* --- canonical 3-arg ctor used by GPS screen --- */
+    public Strotta(int userId, double distanceKm, int seconds) {
+        this.userId     = userId;
+        this.distanceKm = distanceKm;
+        this.seconds    = seconds;
     }
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a");
 
-        return "Cardio" + cardio
-                + "\n" + "Date: " +"\n" +
+        return "Cardio: " + cardio
+                + "km\n" + "Date: " +"\n" +
                 date.format(formatter);
     }
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+
 
     public int getCardio() {
         return cardio;
@@ -60,16 +72,35 @@ public class Strotta {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+    public double paceMinPerKm(){
+        return distanceKm == 0? 0:(seconds /60.0)/distanceKm;
+    }
+
+    public double getDistanceKm() {
+        return distanceKm;
+    }
+
+    public void setDistanceKm(double distanceKm) {
+        this.distanceKm = distanceKm;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Strotta strotta = (Strotta) o;
-        return id == strotta.id && cardio == strotta.cardio && userId == strotta.userId;
+        return userId == strotta.userId && cardio == strotta.cardio;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cardio, userId);
+        return Objects.hash(userId, cardio, userId);
     }
 }
