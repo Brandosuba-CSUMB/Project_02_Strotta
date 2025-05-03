@@ -3,31 +3,45 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.project_02_exercise_app.database.StrottaDAO;
 import com.example.project_02_exercise_app.database.StrottaDatabase;
-import java.util.concurrent.Executors;
+import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.entities.User;
+import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
 public class AdminActivity extends AppCompatActivity {
     private RunAdapter runAdapter;
+    private StrottaAdapter strottaAdapter;
+
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_admin);
 
-        RecyclerView recyclerView = findViewById(R.id.run_recycler_view);
         Button deleteAll = findViewById(R.id.delete_all_runs_btn);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        runAdapter = new RunAdapter();
-        recyclerView.setAdapter(runAdapter);
+        RecyclerView recyclerView = findViewById(R.id.run_recycler_view);
 
-        StrottaDatabase.getDatabase(getApplicationContext()).runDAO().getAllRuns().observe(this,runs -> {
-            runAdapter.setRuns(runs);
-        });
-        deleteAll.setOnClickListener(v ->{
+
+        strottaAdapter = new StrottaAdapter();
+        recyclerView.setAdapter(strottaAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
+        repository.getAllLogs().observe(this, strottaAdapter::submitList);
+
+
+        deleteAll.setOnClickListener(v -> {
             StrottaDatabase.databaseWriteExecution.execute(() -> {
-                StrottaDatabase.getDatabase(getApplicationContext()).runDAO().deleteAll();
+                StrottaDatabase.getDatabase(getApplicationContext())
+                        .strottaDAO().deleteAll();
             });
         });
     }

@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 
+import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.databinding.ActivityLandingBinding;
@@ -72,9 +74,10 @@ public class LandingActivity extends AppCompatActivity {
 
         binding.landingCardioButton.setOnClickListener(v ->
                 startActivity(CardioActivity.cardioIntentFactory(this)));
+        binding.landingCalisthenicsButton.setOnClickListener(v ->
+                startActivity(CalisthenicsActivity.calisthenicsIntentFactory(this, userId)));
 
         binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
-        binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
        // binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
         binding.landingAdminButton.setOnClickListener(v ->
                 startActivity(new Intent(this, AdminActivity.class)));
@@ -107,12 +110,14 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void logExercise(String type) {
-        String duration = "30 minutes";  // or whatever you generate
-        int minutes = Integer.parseInt(duration.split(" ")[0]);
-        double kilometers = 0.0;
-        Strotta log = new Strotta(userId,kilometers, minutes);
-        repository.insertStrottaRepository(log);
-        Toast.makeText(this, type + " logged!", Toast.LENGTH_SHORT).show();
+        int minutes = 30;
+        double kilometers = 0.5;
+        long timeInMs = minutes * 60 * 1000;
+        long distanceInMeters = (long)(kilometers * 1000);
+
+        Run run = new Run(System.currentTimeMillis(), distanceInMeters, timeInMs);
+        StrottaDatabase.getDatabase(getApplicationContext()).runDAO().insert(run);
+        Toast.makeText(this, type + " run logged!", Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

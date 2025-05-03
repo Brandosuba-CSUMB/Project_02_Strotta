@@ -60,6 +60,9 @@ public class StrottaRepository {
     public LiveData<List<Strotta>> getAllLogsByUserId(int loggedInUserId) {
         return strottaDAO.getRecordsByUserId(loggedInUserId);
     }
+    public LiveData<List<Strotta>> getAllLogs() {
+        return strottaDAO.getAll();
+    }
 
     public long insertUserSync(User u) {
         Future<Long> f = StrottaDatabase.databaseWriteExecution.submit(

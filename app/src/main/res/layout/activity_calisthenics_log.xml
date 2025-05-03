@@ -42,6 +42,8 @@
         android:hint="@string/enter_an_exercise"
         android:inputType="textAutoComplete"
         android:padding="8dp"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
         app:layout_constraintBaseline_toBaselineOf="@+id/exerciseLabelTextView"
         app:layout_constraintStart_toEndOf="@+id/exerciseLabelTextView" />
 
@@ -65,6 +67,8 @@
         android:hint="@string/enter_a_weight"
         android:inputType="number|numberDecimal"
         android:padding="8dp"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
         app:layout_constraintBaseline_toBaselineOf="@+id/weightLabelTextView"
         app:layout_constraintStart_toEndOf="@+id/weightLabelTextView" />
 

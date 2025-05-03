@@ -19,4 +19,10 @@ public interface StrottaDAO {
     @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
     LiveData<List<Strotta>> getRecordsByUserId(int loggedInUserId);
 
+    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " ORDER BY date DESC")
+    LiveData<List<Strotta>> getAll();
+    @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE)
+    void deleteAll();
+
+
 }

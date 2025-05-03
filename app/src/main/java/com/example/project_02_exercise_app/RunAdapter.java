@@ -19,8 +19,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
     @NonNull
     @Override
     public RunViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.run_item,parent,false);
-        return new RunViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.run_item, parent, false);        return new RunViewHolder(v);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class RunAdapter extends RecyclerView.Adapter<RunAdapter.RunViewHolder> {
         return runs.size();
     }
     public void setRuns(List<Run> runs){
-        this.runs = runs;
+        this.runs = (runs == null) ? new ArrayList<>() : runs;
         notifyDataSetChanged();
     }
     public static class RunViewHolder extends RecyclerView.ViewHolder{
