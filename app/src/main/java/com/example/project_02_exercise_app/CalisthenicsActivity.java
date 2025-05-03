@@ -3,6 +3,7 @@ package com.example.project_02_exercise_app;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,6 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.databinding.ActivityCalisthenicsBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
 
@@ -35,8 +38,10 @@ public class CalisthenicsActivity extends FragmentActivity {
         super.onCreate(s);
         binding = ActivityCalisthenicsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         userId = getIntent().getIntExtra("uid", -1);
         timeTv = findViewById(R.id.timeTv);
+
         binding.recordBtn.setOnClickListener(v -> {
             permissions.launch(new String[]{
                     android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -74,14 +79,27 @@ public class CalisthenicsActivity extends FragmentActivity {
     }
 
     private void stopRecording(){
-        stopService(new Intent(this,CardioTrackingService.class)
-                .setAction(CardioTrackingService.ACTION_STOP));
+//        stopService(new Intent(this,CardioTrackingService.class)
+//                .setAction(CardioTrackingService.ACTION_STOP));
+//
+//
+//        Intent logIntent = new Intent(this, CalisthenicsLogActivity.class)
+//                .putExtra("duration_ms",elapsedMs)
+//                .putExtra("uid", userId);
+//        startActivity(logIntent);
 
+        SharedPreferences prefs = getSharedPreferences(
+                getString(R.string.preference_file_key), MODE_PRIVATE);
+        int userId = prefs.getInt(getString(R.string.preference_userId_key), -1);
 
-        Intent logIntent = new Intent(this, CalisthenicsLogActivity.class)
-                .putExtra("duration_ms",elapsedMs)
-                .putExtra("uid", userId);
-        startActivity(logIntent);
+        Intent log = new Intent(this, CalisthenicsLogActivity.class)
+                .putExtra("uid",          userId)
+                .putExtra("duration_ms",  elapsedMs);
+        startActivity(log);
+
+        int seconds = (int) (elapsedMs /1000);
+        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
+        repository.insertStrottaRepository(new Strotta(userId, seconds));
 
         /* reset UI */
         binding.recordBtn.setEnabled(true);
@@ -105,6 +123,8 @@ public class CalisthenicsActivity extends FragmentActivity {
     private final Runnable tick = new Runnable() {
         @Override public void run() {
             if (startRealTime == 0L) return;  // not recording
+
+            elapsedMs = SystemClock.elapsedRealtime() - startRealTime;
             updateStatsUI();// refresh timer & pace even if no GPS
             binding.statsBar.postDelayed(this, 1);   // tick every 1 s
         }
