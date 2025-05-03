@@ -66,7 +66,7 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
         repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
     }
 
-    private void loadExercises() {
+    private void loadRuns() {
         StrottaDatabase.getDatabase(getApplicationContext()).runDAO().getAllRuns()
                 .observe(this, runs -> {
                     StringBuilder sb = new StringBuilder("Logged Runs:\n\n");
