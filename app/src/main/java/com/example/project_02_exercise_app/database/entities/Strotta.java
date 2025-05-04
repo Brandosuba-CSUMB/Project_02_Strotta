@@ -23,6 +23,8 @@ indices = @Index("userId"))
 public class Strotta {
     @PrimaryKey(autoGenerate = true)
     private int cardio;
+    private double bodyWeight;
+    private String calisthenicsExercise;
     private int userId;
     private LocalDateTime date = LocalDateTime.now();
     private double distanceKm;
@@ -40,6 +42,13 @@ public class Strotta {
         this.userId     = userId;
         this.distanceKm = distanceKm;
         this.seconds    = seconds;
+    }
+
+    //This is for calisthenics
+    public Strotta(int userId, String exercise, double bodyWeight) {
+        this.userId = userId;
+        this.calisthenicsExercise = exercise;
+        this.bodyWeight = bodyWeight;
     }
     @Override
     public String toString() {
@@ -90,6 +99,22 @@ public class Strotta {
 
     public void setSeconds(int seconds) {
         this.seconds = seconds;
+    }
+
+    public double getBodyWeight() {
+        return bodyWeight;
+    }
+
+    public void setBodyWeight(double bodyWeight) {
+        this.bodyWeight = bodyWeight;
+    }
+
+    public String getCalisthenicsExercise() {
+        return calisthenicsExercise;
+    }
+
+    public void setCalisthenicsExercise(String calisthenicsExercise) {
+        this.calisthenicsExercise = calisthenicsExercise;
     }
 
     @Override
