@@ -5,9 +5,11 @@
     android:padding="24dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <TextView
+        android:textColor="#FFFF"
         android:id="@+id/distance_tv"
         android:textSize="24sp"
         android:text="@string/distance"
@@ -20,6 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
+        android:textColor="#FFFF"
         android:id="@+id/time_tv"
         android:textSize="24sp"
         android:text="@string/time"
@@ -32,6 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
     <TextView
+        android:textColor="#FFFF"
         android:id="@+id/pace_tv"
         android:textSize="20sp"
         android:text="@string/pace"
@@ -66,6 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/log_btn">
 
         <TextView
+            android:textColor="#FFFF"
             android:id="@+id/log_history_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

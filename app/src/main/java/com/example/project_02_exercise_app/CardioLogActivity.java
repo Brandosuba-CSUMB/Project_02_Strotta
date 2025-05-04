@@ -88,7 +88,12 @@ public class CardioLogActivity extends AppCompatActivity {
         long ss = totalSeconds % 60;
         String timeStr = hh>0 ?
                 String.format("%d:%02d:%02d",hh,mm,ss) : String.format("%02d:%02d",mm,ss);
-        return String.format("* %.2f km| %s",km,timeStr);
+
+        float pace = (ms/1000f) / km;
+        int pMin = (int) (pace / 60);
+        int pSec = Math.round(pace) % 60;
+        String paceStr = String.format("%d:%02d min/km",pMin,pSec);
+        return String.format("* %.2f km | %s | %s",km,timeStr,paceStr);
     }
     public static Intent cardioRunIntentFactory(Context context, float distM,long elaspedMs){
         return new Intent(context,CardioLogActivity.class).putExtra("DISTANCE",distM).putExtra("ELAPSED",elaspedMs);

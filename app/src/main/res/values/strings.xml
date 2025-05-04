@@ -40,4 +40,7 @@
     <string name="enter_a_weight">Enter a body weight</string>
     <string name="reps">Reps</string>
     <string name="enter_reps">Enter reps</string>
+    <string name="enter_weight">Enter weight</string>
+    <string name="log_workout">Log Workout</string>
+    <string name="Reps" />
 </resources>

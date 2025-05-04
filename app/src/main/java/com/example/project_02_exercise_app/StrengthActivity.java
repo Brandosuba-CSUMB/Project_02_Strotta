@@ -1,24 +1,20 @@
 package com.example.project_02_exercise_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.TextView;
-import android.content.Intent;
-import android.content.IntentFilter;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
+import com.example.project_02_exercise_app.databinding.ActivityStrengthBinding;
 
-public class StrengthActivity extends FragmentActivity  {
+public class StrengthActivity extends FragmentActivity {
 
-    private ActivityCardioBinding binding;
-
+    private ActivityStrengthBinding binding;
     private int weight = 0;
-
     private String exerciseType = null;
-
     private int userId = 0;
     private static final String STRENGTH_ACTIVITY_USER_ID = "com.example.project_02_exercise_app";
     private long elapsedMs = 0;
@@ -26,10 +22,9 @@ public class StrengthActivity extends FragmentActivity  {
     private TextView timeTv;
 
     @Override
-    protected void onCreate(Bundle s) {
-
-        super.onCreate(s);
-        binding = ActivityCardioBinding.inflate(getLayoutInflater());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityStrengthBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         timeTv = binding.timeTv;
@@ -74,9 +69,7 @@ public class StrengthActivity extends FragmentActivity  {
         }
     };
 
-    public static Intent strengthIntentFactory(Context c, int userId) {
-        Intent intent = new Intent(c, MainActivity.class);
-        intent.putExtra(STRENGTH_ACTIVITY_USER_ID, userId);
-        return intent;
+    public static Intent strengthIntentFactory(Context context) {
+        return new Intent(context, StrengthActivity.class);
     }
 }

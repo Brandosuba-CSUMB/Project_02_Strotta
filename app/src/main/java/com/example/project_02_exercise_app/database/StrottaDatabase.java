@@ -31,7 +31,7 @@ public abstract class StrottaDatabase extends RoomDatabase {
     private static volatile StrottaDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
 
-    static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static StrottaDatabase getDatabase(final Context context){
         if (INSTANCE == null) {

@@ -71,13 +71,14 @@ public class LandingActivity extends AppCompatActivity {
         });
 
         binding.landingCardioButton.setOnClickListener(v ->
-                startActivity(CardioActivity.cardioIntentFactory(this)));
+                startActivity(CardioActivity.cardioIntentFactory(this )));
 
-        binding.landingStrengthButton.setOnClickListener(v -> logExercise("Strength"));
+        binding.landingStrengthButton.setOnClickListener(v ->
+                startActivity(StrengthActivity.strengthIntentFactory(this )));
         binding.landingCalisthenicsButton.setOnClickListener(v -> logExercise("Calisthenics"));
        // binding.landingAdminButton.setVisibility(user.isAdmin() ? View.VISIBLE : View.INVISIBLE);
         binding.landingAdminButton.setOnClickListener(v ->
-                Toast.makeText(this, "Boss in the house! Admin Page!", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, AdminActivity.class)));
     }
 
     private void loginUser(Bundle savedInstanceState) {
