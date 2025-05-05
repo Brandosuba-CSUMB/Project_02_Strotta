@@ -27,6 +27,7 @@ import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 import com.example.project_02_exercise_app.databinding.ActivityCalisthenicsLogBinding;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -40,7 +41,7 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
 
     public static final String TAG = "DAC_STROTTA";
     private long elapsed;
-    String exercise = "";
+    String exercise = null;
     double bodyWeight = 0.0;
     private int userId;
     private User user;
@@ -55,28 +56,49 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
         binding = ActivityCalisthenicsLogBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        repository = StrottaRepository.getRepository(getApplication());
-//        elapsed = getIntent().getLongExtra("durations_ms", 0L);
-//        userId = getIntent().getIntExtra("uid", -1);
-//
-//        binding.logHistoryTv.setMovementMethod(new ScrollingMovementMethod());
-//        updateDisplay();
-//        binding.logBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getInformationFromDisplay();
-//                insertStrottaRecord();
-//                updateDisplay();
-//            }
-//        });
-//
-//        binding.exerciseInputEditTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateDisplay();
-//            }
-//        });
+        repository = StrottaRepository.getRepository(getApplication());
 
+        Intent i = getIntent();
+
+        userId = i.getIntExtra("uid", -1);
+        if (userId == -1) {
+            SharedPreferences prefs = getSharedPreferences(
+                    getString(R.string.preference_file_key), MODE_PRIVATE);
+            userId = prefs.getInt(   getString(R.string.preference_userId_key), -1);
+        }
+        if (userId == -1) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        elapsed = i.getLongExtra ("duration_ms", 0L);
+
+        TextView timeTv = findViewById(R.id.time_tv);
+        Button logBtn = findViewById(R.id.log_btn);
+
+        long secs = elapsed / 1000;
+        long mm   = (secs % 3600) / 60;
+        long ss   = secs % 60;
+        timeTv.setText(
+                String.format(Locale.US, "%02d:%02d", mm, ss));
+
+        exerciseInput = findViewById(R.id.exerciseInputEditTextView);
+        weightInput = findViewById(R.id.weightInputEditTextView);
+
+        binding.logBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exercise = exerciseInput.getText().toString();
+                try {
+                    bodyWeight = Double.parseDouble(weightInput.getText().toString());
+                } catch (NumberFormatException e) {
+                    Log.d(TAG, "Error reading body weight.");
+                }
+                Strotta s = new Strotta(userId, exercise, bodyWeight);
+                repository.insertStrottaRepository(s);
+            }
+        });
 
 
 //        exerciseInput = findViewById(R.id.exerciseInputEditTextView);
@@ -95,32 +117,32 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
 
 
 
-        Intent i = getIntent();
-        userId = i.getIntExtra("uid", -1);
-        elapsed  = getIntent().getLongExtra ("duration_ms", 0L);
-
-        TextView timeTv = findViewById(R.id.time_tv);
-        Button logBtn = findViewById(R.id.log_btn);
-
-        long secs = elapsed / 1000;
-        long mm   = (secs % 3600) / 60;
-        long ss   = secs % 60;
-        timeTv.setText(
-                String.format(Locale.US, "%02d:%02d", mm, ss));
-
-        logBtn.setOnClickListener(v -> {
-            finish();
-        });
-        if (userId == -1) {
-            SharedPreferences prefs = getSharedPreferences(
-                    getString(R.string.preference_file_key), MODE_PRIVATE);
-            userId = prefs.getInt(   getString(R.string.preference_userId_key), -1);
-        }
-        if (userId == -1) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+//        Intent i = getIntent();
+//        userId = i.getIntExtra("uid", -1);
+//        elapsed = i.getLongExtra ("duration_ms", 0L);
+//
+//        TextView timeTv = findViewById(R.id.time_tv);
+//        Button logBtn = findViewById(R.id.log_btn);
+//
+//        long secs = elapsed / 1000;
+//        long mm   = (secs % 3600) / 60;
+//        long ss   = secs % 60;
+//        timeTv.setText(
+//                String.format(Locale.US, "%02d:%02d", mm, ss));
+//
+//        logBtn.setOnClickListener(v -> {
+//            finish();
+//        });
+//        if (userId == -1) {
+//            SharedPreferences prefs = getSharedPreferences(
+//                    getString(R.string.preference_file_key), MODE_PRIVATE);
+//            userId = prefs.getInt(   getString(R.string.preference_userId_key), -1);
+//        }
+//        if (userId == -1) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+//            return;
+//        }
 
         RecyclerView recyclerView = findViewById(R.id.calisthenics_recycler);
         StrottaAdapter adapter = new StrottaAdapter();
@@ -128,38 +150,9 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
+//        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
         repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
     }
-
-//    private void getInformationFromDisplay() {
-//        exercise = binding.exerciseInputEditTextView.getText().toString();
-//        try {
-//            bodyWeight = Double.parseDouble(binding.weightInputEditTextView.getText().toString());
-//        } catch (NumberFormatException e) {
-//            Log.d(TAG, "Error reading value for body weight");
-//        }
-//    }
-//
-//    private void insertStrottaRecord() {
-//        if (exercise.isEmpty()) {
-//            return;
-//        }
-//        Strotta log = new Strotta(userId, exercise, bodyWeight);
-//        repository.insertStrottaRepository(log);
-//    }
-//
-//    private void updateDisplay() {
-//        LiveData<List<Strotta>> allLogs = repository.getAllLogsByUserId(userId);
-////        if (!allLogs.isInitialized()) {
-////            Toast.makeText(this, "Nothing to show", Toast.LENGTH_SHORT).show();
-////        }
-//        StringBuilder sb = new StringBuilder();
-//        for (Strotta log : Objects.requireNonNull(allLogs.getValue())) {
-//            sb.append(log);
-//        }
-//        binding.logHistoryTv.setText(sb.toString());
-//    }
 
     private void loadRuns() {
         StrottaDatabase.getDatabase(getApplicationContext()).runDAO().getAllRuns()
