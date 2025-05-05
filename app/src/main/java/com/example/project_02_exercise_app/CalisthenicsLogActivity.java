@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Run;
+import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
 import java.util.Locale;
@@ -22,39 +24,28 @@ import java.util.Locale;
 public class CalisthenicsLogActivity extends AppCompatActivity {
     private long elapsed;
     private int userId;
-    private TextView logHistoryTextView;
+    private EditText exerciseInput;
+    private EditText weightInput;
 
+    private TextView logHistoryTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calisthenics_log);
 
-        Intent i = getIntent();
-        userId = i.getIntExtra("uid", -1);
-        elapsed  = getIntent().getLongExtra ("duration_ms", 0L);
+        exerciseInput = findViewById(R.id.exerciseInputEditTextView);
+        weightInput = findViewById(R.id.weightInputEditTextView);
+        elapsed = getIntent().getLongExtra("durations_ms", 0L);
+        userId = getIntent().getIntExtra("uid", -1);
+        Button logButton =  findViewById(R.id.log_btn);
 
-        TextView timeTv = findViewById(R.id.time_tv);
-        Button logBtn = findViewById(R.id.log_btn);
-
-        long secs = elapsed / 1000;
-        long mm   = (secs % 3600) / 60;
-        long ss   = secs % 60;
-        timeTv.setText(
-                String.format(Locale.US, "%02d:%02d", mm, ss));
-
-        logBtn.setOnClickListener(v -> {
-            finish();
-        });
-        if (userId == -1) {
-            SharedPreferences prefs = getSharedPreferences(
-                    getString(R.string.preference_file_key), MODE_PRIVATE);
-            userId = prefs.getInt(   getString(R.string.preference_userId_key), -1);
-        }
-        if (userId == -1) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+//        logButton.setOnClickListener(view -> {
+//            String excercise = exerciseInput.getText().toString().trim();
+//            double weight = Double.parseDouble(weightInput.getText().toString());
+//            int durationSeconds = (int)(elapsed/1000);
+//            StrottaRepository repo = StrottaRepository.getRepository(getApplication());
+//            repo.insert
+//        });
 
         RecyclerView recyclerView = findViewById(R.id.calisthenics_recycler);
         StrottaAdapter adapter = new StrottaAdapter();

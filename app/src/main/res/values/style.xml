@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="WhiteTextView">
-        <item name="android:textColor">#FFFFFF</item>
+    <style name="AnimatedButton" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/material_dynamic_primary0</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:stateListAnimator">@style/AnimatedButton</item>
+        <item name="android:elevation">6dp</item>
     </style>
 </resources>
