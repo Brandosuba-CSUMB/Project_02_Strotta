@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Calisthenics;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.databinding.ActivityCalisthenicsBinding;
 import com.example.project_02_exercise_app.tracking.CardioTrackingService;
