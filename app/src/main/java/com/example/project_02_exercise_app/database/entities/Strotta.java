@@ -25,6 +25,8 @@ public class Strotta {
     private int cardio;
     private double bodyWeight;
     private String calisthenicsExercise;
+
+    private boolean isCalisthenics = false;
     private int userId;
     private LocalDateTime date = LocalDateTime.now();
     private double distanceKm;
@@ -49,6 +51,7 @@ public class Strotta {
         this.userId = userId;
         this.calisthenicsExercise = exercise;
         this.bodyWeight = bodyWeight;
+        this.isCalisthenics = true;
     }
     @Override
     public String toString() {
@@ -117,15 +120,23 @@ public class Strotta {
         this.calisthenicsExercise = calisthenicsExercise;
     }
 
+    public boolean isCalisthenics() {
+        return isCalisthenics;
+    }
+
+    public void setCalisthenics(boolean calisthenics) {
+        isCalisthenics = calisthenics;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Strotta strotta = (Strotta) o;
-        return userId == strotta.userId && cardio == strotta.cardio;
+        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(date, strotta.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, cardio, userId);
+        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, date, distanceKm, seconds);
     }
 }
