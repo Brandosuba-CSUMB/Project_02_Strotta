@@ -39,9 +39,9 @@
             android:foregroundServiceType="location|health"/>
         <activity android:name=".CardioLogActivity"/>
         <activity android:name=".CardioActivity"/>
+        <activity android:name=".StrengthLogActivity"/>
+        <activity android:name=".StrengthActivity"/>
         <activity android:name=".SignupActivity"/>
-
-
         <activity android:name=".LoginActivity"
             android:exported="true">
         <intent-filter>
