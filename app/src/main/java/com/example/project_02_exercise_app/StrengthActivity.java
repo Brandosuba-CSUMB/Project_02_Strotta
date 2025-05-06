@@ -5,21 +5,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.TextView;
-import androidx.fragment.app.FragmentActivity;
 
-import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
+import com.example.project_02_exercise_app.database.viewHolders.StrottaViewModel;
 import com.example.project_02_exercise_app.databinding.ActivityStrengthBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StrengthActivity extends FragmentActivity {
 
     private ActivityStrengthBinding binding;
-    private int weight = 0;
-    private String exerciseType = null;
-    private int userId = 0;
-    private static final String STRENGTH_ACTIVITY_USER_ID = "com.example.project_02_exercise_app";
     private long elapsedMs = 0;
     private long startRealtime = 0L;
     private TextView timeTv;
+
+    private RecyclerView recyclerView;
+    private StrottaAdapter strottaAdapter;
+    private StrottaViewModel strottaViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +36,8 @@ public class StrengthActivity extends FragmentActivity {
         binding = ActivityStrengthBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Timer setup
         timeTv = binding.timeTv;
-
         binding.recordBtn.setOnClickListener(v -> {
             startRealtime = SystemClock.elapsedRealtime();
             binding.recordBtn.setEnabled(false);
@@ -37,6 +46,17 @@ public class StrengthActivity extends FragmentActivity {
         });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
+
+        RecyclerView recyclerView1 = findViewById(R.id.strengthRecycler);
+        strottaAdapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(strottaAdapter);
+
+        strottaViewModel = new ViewModelProvider(this).get(StrottaViewModel.class);
+        strottaViewModel.getAllStrengthLogs().observe(this, strottas -> {
+            // Update adapter with only strength logs
+            strottaAdapter.submitList(strottas);
+        });
     }
 
     private void stopRecording() {

@@ -18,13 +18,18 @@ import java.util.concurrent.Future;
 public class StrottaRepository {
     public final StrottaDAO strottaDAO;
     private final UserDAO userDAO;
+
+    private final LiveData<List<Strotta>> allStrengthLogs;
+
     private ArrayList<Strotta> allLogs;
+
     private static StrottaRepository repository;
 
     public StrottaRepository(Application application) {
         StrottaDatabase db = StrottaDatabase.getDatabase(application);
         this.strottaDAO = db.strottaDAO();
         this.userDAO = db.userDAO();
+        this.allStrengthLogs = strottaDAO.getAllStrengthLogs();
         this.allLogs = new ArrayList<>();
     }
 
@@ -78,6 +83,10 @@ public class StrottaRepository {
 
     public LiveData<List<Strotta>> getAllLogsByUserIdLiveData(int loggedInUserId) {
         return strottaDAO.getRecordsByUserIdLiveData(loggedInUserId);
+    }
+
+    public LiveData<List<Strotta>> getAllStrengthLogs() {
+        return allStrengthLogs;
     }
 
     @Deprecated

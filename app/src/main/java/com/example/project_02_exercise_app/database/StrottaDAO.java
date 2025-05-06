@@ -22,4 +22,14 @@ public interface StrottaDAO {
 
     @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE userId = :loggedInUserId ORDER BY date DESC")
     LiveData<List<Strotta>> getRecordsByUserIdLiveData(int loggedInUserId);
+
+    @Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE strengthExerciseName IS NOT NULL ORDER BY date DESC")
+    LiveData<List<Strotta>> getAllStrengthLogs();
+
+    @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE strengthExerciseName IS NOT NULL")
+    void deleteAllStrengthLogs();
+
+    //@Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " ORDER BY date DESC")
+    //LiveData<List<Strotta>> getAllLogsLiveData();
+
 }

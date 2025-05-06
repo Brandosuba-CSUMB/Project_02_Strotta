@@ -42,5 +42,6 @@
     <string name="enter_reps">Enter reps</string>
     <string name="enter_weight">Enter weight</string>
     <string name="log_workout">Log Workout</string>
-    <string name="Reps" />
+    <string name="Reps">Reps</string>
+    <string name="logged_workouts_n">Logged Workouts:\n</string>
 </resources>
