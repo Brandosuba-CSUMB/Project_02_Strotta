@@ -28,7 +28,6 @@ public interface StrottaDAO {
 
     @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE + " WHERE strengthExerciseName IS NOT NULL")
     void deleteAllStrengthLogs();
-
     //@Query("SELECT * FROM " + StrottaDatabase.STROTTA_TABLE + " ORDER BY date DESC")
     //LiveData<List<Strotta>> getAllLogsLiveData();
 

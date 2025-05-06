@@ -21,15 +21,18 @@ public class Strotta {
     // Fields from Strength
     private String strengthExerciseName;
     private int strengthReps;
+
+    private int strengthSets;
+
     private double strengthWeight;
     private long strengthElapsedMs;
     private LocalDateTime date;
 
-    public Strotta(int userId, int cardio, String strengthExerciseName, double strengthWeight, int strengthReps, long strengthElapsedMs) {
+    public Strotta(int userId, String strengthExerciseName, double strengthWeight, int strengthSets,int strengthReps, long strengthElapsedMs) {
         this.userId = userId;
-        this.cardio = cardio;
         this.strengthExerciseName = strengthExerciseName;
         this.strengthWeight = strengthWeight;
+        this.strengthSets = strengthSets;
         this.strengthReps = strengthReps;
         this.strengthElapsedMs = strengthElapsedMs;
         date = LocalDateTime.now();
@@ -44,11 +47,17 @@ public class Strotta {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a");
 
-        return "Cardio: " + cardio +
-                "\nStrength Exercise: " + strengthExerciseName +
-                "\nReps: " + strengthReps +
+        long totalSeconds = strengthElapsedMs / 1000;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+
+        String timeFormatted = String.format("%02d:%02d", minutes, seconds);
+
+        return "Strength Exercise: " + strengthExerciseName +
                 "\nWeight: " + strengthWeight +
-                "\nElapsed Time: " + strengthElapsedMs + " ms" +
+                "\nSets: " + strengthSets +
+                "\nReps: " + strengthReps +
+                "\nElapsed Time: " + timeFormatted +
                 "\nDate: " + date.format(formatter);
     }
     public int getId() {
@@ -89,6 +98,12 @@ public class Strotta {
         this.strengthReps = strengthReps;
     }
 
+    public int getStrengthSets() {
+        return strengthSets;
+    }
+    public void setStrengthSets(int strengthSets) {
+        this.strengthSets = strengthSets;
+    }
     public double getStrengthWeight() {
         return strengthWeight;
     }
@@ -117,6 +132,7 @@ public class Strotta {
                 cardio == strotta.cardio &&
                 userId == strotta.userId &&
                 Objects.equals(strengthExerciseName, strotta.strengthExerciseName) &&
+                strengthSets == strotta.strengthSets &&
                 strengthReps == strotta.strengthReps &&
                 Double.compare(strengthWeight, strotta.strengthWeight) == 0 &&
                 strengthElapsedMs == strotta.strengthElapsedMs;
@@ -124,6 +140,6 @@ public class Strotta {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cardio, userId, strengthExerciseName, strengthReps, strengthWeight, strengthElapsedMs);
+        return Objects.hash(id, cardio, userId, strengthExerciseName, strengthReps, strengthSets, strengthWeight, strengthElapsedMs);
     }
 }

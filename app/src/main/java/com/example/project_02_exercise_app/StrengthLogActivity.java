@@ -33,6 +33,7 @@ public class StrengthLogActivity extends AppCompatActivity {
         EditText exerciseInput = findViewById(R.id.strengthExerciseInputEditTextView);
         EditText weightInput = findViewById(R.id.strengthWeightInputEditTextView);
         EditText repsInput = findViewById(R.id.strengthRepsInputEditTextView);
+        EditText setsInput = findViewById(R.id.strengthSetsInputEditTextView);
         TextView timeTv = findViewById(R.id.time_tv);
         Button logBtn = findViewById(R.id.strengthLog_btn);
 
@@ -55,6 +56,7 @@ public class StrengthLogActivity extends AppCompatActivity {
         logBtn.setOnClickListener(v -> {
             String exercise = exerciseInput.getText().toString().trim();
             String weightStr = weightInput.getText().toString().trim();
+            String setsStr = setsInput.getText().toString().trim();
             String repsStr = repsInput.getText().toString().trim();
 
             if (exercise.isEmpty() || weightStr.isEmpty() || repsStr.isEmpty()) {
@@ -63,9 +65,10 @@ public class StrengthLogActivity extends AppCompatActivity {
             }
 
             double weight = Float.parseFloat(weightStr);
+            int sets = Integer.parseInt(setsStr);
             int reps = Integer.parseInt(repsStr);
 
-            Strotta strottaLog = new Strotta(0, 0, exercise, weight, reps, elapsed);
+            Strotta strottaLog = new Strotta(0, exercise, weight, sets, reps, elapsed);
             strottaLog.setDate(LocalDateTime.now());
 
             Executors.newSingleThreadExecutor().execute(() -> {

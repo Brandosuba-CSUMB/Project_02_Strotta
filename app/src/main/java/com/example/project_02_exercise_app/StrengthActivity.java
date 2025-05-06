@@ -47,7 +47,7 @@ public class StrengthActivity extends FragmentActivity {
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
 
-        RecyclerView recyclerView1 = findViewById(R.id.strengthRecycler);
+        RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
         strottaAdapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(strottaAdapter);
@@ -62,11 +62,15 @@ public class StrengthActivity extends FragmentActivity {
     private void stopRecording() {
         binding.recordBtn.setEnabled(true);
         binding.stopBtn.setEnabled(false);
-        elapsedMs = 0;
-        timeTv.setText("00:00");
         binding.statsBar.removeCallbacks(tick);
+        elapsedMs = SystemClock.elapsedRealtime() - startRealtime;
         startRealtime = 0L;
+        timeTv.setText("00:00");
+
+        Intent intent = StrengthLogActivity.strengthLogIntentFactory(this, elapsedMs);
+        startActivity(intent);
     }
+
 
     private void updateStatsUI() {
         long s = elapsedMs / 1000;
