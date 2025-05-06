@@ -32,6 +32,7 @@ public class AdminActivity extends AppCompatActivity {
         Button deleteAll = findViewById(R.id.delete_all_runs_btn);
         RecyclerView recyclerView = findViewById(R.id.run_recycler_view);
         RecyclerView userRecycler = findViewById(R.id.user_recycler_view);
+        selectedUserTitle = findViewById(R.id.selected_user_title);
 
         strottaAdapter = new StrottaAdapter();
         recyclerView.setAdapter(strottaAdapter);
