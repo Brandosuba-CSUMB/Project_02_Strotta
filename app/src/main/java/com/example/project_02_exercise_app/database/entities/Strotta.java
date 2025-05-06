@@ -28,7 +28,7 @@ public class Strotta {
     private boolean isCalisthenics = false;
     private int userId;
     private int id;
-    public String title = "untitled";
+    public String title = "Activity";
     private LocalDateTime date = LocalDateTime.now();
     private double distanceKm;
     private int seconds;

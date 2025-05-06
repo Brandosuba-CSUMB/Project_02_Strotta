@@ -123,7 +123,7 @@ public class CalisthenicsActivity extends FragmentActivity {
 
             elapsedMs = SystemClock.elapsedRealtime() - startRealTime;
             updateStatsUI();// refresh timer & pace even if no GPS
-            binding.statsBar.postDelayed(this, 1);   // tick every 1 s
+            binding.statsBar.postDelayed(this, 1000);   // tick every 1 s
         }
     };
 

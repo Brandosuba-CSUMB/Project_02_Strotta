@@ -23,6 +23,8 @@ import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -31,6 +33,7 @@ public class CardioLogActivity extends AppCompatActivity {
     private float distance;
     private long elapsed;
     private int userId;
+    private Run run;
     private TextView logHistoryTextView;
 
     @Override
@@ -86,6 +89,7 @@ public class CardioLogActivity extends AppCompatActivity {
 
         StrottaRepository repository = StrottaRepository.getRepository(getApplication());
         repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
+
 
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(

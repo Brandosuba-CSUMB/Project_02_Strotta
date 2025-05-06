@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_02_exercise_app.database.entities.Calisthenics;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 
 import java.util.function.Consumer;
