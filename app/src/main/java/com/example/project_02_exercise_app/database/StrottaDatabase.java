@@ -11,6 +11,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.project_02_exercise_app.MainActivity;
+import com.example.project_02_exercise_app.database.entities.Calisthenics;
 import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
@@ -19,7 +20,7 @@ import com.example.project_02_exercise_app.database.typeConverters.LocalDateType
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {User.class, Strotta.class, Run.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class}, version = 2, exportSchema = false)
 
 public abstract class StrottaDatabase extends RoomDatabase {
 

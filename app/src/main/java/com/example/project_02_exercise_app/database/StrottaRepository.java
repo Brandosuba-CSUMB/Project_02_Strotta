@@ -56,13 +56,20 @@ public class StrottaRepository {
     public LiveData<User> getUserByUserId(int userId) {
         return userDAO.getUserByUserId(userId);
     }
+    public void delete(Strotta s){
+        StrottaDatabase.databaseWriteExecution.execute(() -> strottaDAO.delete(s));
+    }
 
+    public void rename(int id, String t){
+        StrottaDatabase.databaseWriteExecution.execute(() -> strottaDAO.rename(id, t));
+    }
     public LiveData<List<Strotta>> getAllLogsByUserId(int loggedInUserId) {
         return strottaDAO.getRecordsByUserId(loggedInUserId);
     }
     public LiveData<List<Strotta>> getAllLogs() {
         return strottaDAO.getAll();
     }
+
 
     public long insertUserSync(User u) {
         Future<Long> f = StrottaDatabase.databaseWriteExecution.submit(
