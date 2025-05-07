@@ -33,12 +33,6 @@ public class Strotta {
     private double distanceKm;
     private int seconds;
 
-//Abels strength declarations
-    private String strengthExerciseName;
-    private int strengthReps;
-    private int strengthSets;
-    private double strengthWeight;
-    private long strengthElapsedMs;
 
     @Ignore                                    // ← tell Room to ignore this one
     public Strotta(int userId, int cardioMin) {
@@ -159,11 +153,11 @@ public class Strotta {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Strotta strotta = (Strotta) o;
-        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && id == strotta.id && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && strengthReps == strotta.strengthReps && strengthSets == strotta.strengthSets && Double.compare(strengthWeight, strotta.strengthWeight) == 0 && strengthElapsedMs == strotta.strengthElapsedMs && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(title, strotta.title) && Objects.equals(date, strotta.date) && Objects.equals(strengthExerciseName, strotta.strengthExerciseName);
+        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && id == strotta.id && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(title, strotta.title) && Objects.equals(date, strotta.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, id, title, date, distanceKm, seconds, strengthExerciseName, strengthReps, strengthSets, strengthWeight, strengthElapsedMs);
+        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, id, title, date, distanceKm, seconds);
     }
 }
