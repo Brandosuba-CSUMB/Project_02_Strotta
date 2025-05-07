@@ -22,4 +22,7 @@ public interface StrengthDAO {
     @Query("SELECT * FROM strength_table ORDER BY date DESC")
     LiveData<List<Strength>>getAllStrength();
 
+    @Query("SELECT * FROM strength_table WHERE userId = :userId ORDER BY date DESC")
+    LiveData<List<Strength>> getStrengthLogsByUserId(int userId);
+
 }

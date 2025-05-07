@@ -81,8 +81,8 @@ public class StrengthLogActivity extends AppCompatActivity {
 //    }
 
 
-    public static Intent strengthLogIntentFactory(Context context, long elapsedMs) {
+    public static Intent strengthLogIntentFactory(Context context, long elapsedMs, int userId) {
         return new Intent(context, StrengthLogActivity.class)
-                .putExtra("duration_ms", elapsedMs);
+                .putExtra("duration_ms", elapsedMs).putExtra("user_id",userId);
     }
 }

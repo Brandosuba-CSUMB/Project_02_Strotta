@@ -19,7 +19,7 @@ import java.util.Objects;
         childColumns = "userId",
         onDelete = ForeignKey.CASCADE
 ),
-indices = @Index("userId"))
+        indices = @Index("userId"))
 public class Strotta {
     @PrimaryKey(autoGenerate = true)
     private int cardio;
@@ -33,18 +33,25 @@ public class Strotta {
     private double distanceKm;
     private int seconds;
 
+//Abels strength declarations
+    private String strengthExerciseName;
+    private int strengthReps;
+    private int strengthSets;
+    private double strengthWeight;
+    private long strengthElapsedMs;
+
     @Ignore                                    // ← tell Room to ignore this one
     public Strotta(int userId, int cardioMin) {
-        this.userId     = userId;
+        this.userId = userId;
         this.distanceKm = 0;                   // unknown
-        this.seconds    = cardioMin * 60;      // at least duration is correct
+        this.seconds = cardioMin * 60;      // at least duration is correct
     }
 
     /* --- canonical 3-arg ctor used by GPS screen --- */
     public Strotta(int userId, double distanceKm, int seconds) {
-        this.userId     = userId;
+        this.userId = userId;
         this.distanceKm = distanceKm;
-        this.seconds    = seconds;
+        this.seconds = seconds;
     }
 
     //This is for calisthenics
@@ -54,12 +61,13 @@ public class Strotta {
         this.bodyWeight = bodyWeight;
         this.isCalisthenics = true;
     }
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a");
 
         return "Cardio: " + cardio
-                + "km\n" + "Date: " +"\n" +
+                + "km\n" + "Date: " + "\n" +
                 date.format(formatter);
     }
 
@@ -67,7 +75,6 @@ public class Strotta {
     public int getCardio() {
         return cardio;
     }
-
     public void setCardio(int cardio) {
         this.cardio = cardio;
     }
@@ -87,14 +94,17 @@ public class Strotta {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     public LocalDateTime getDate() {
         return date;
     }
+
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
-    public double paceMinPerKm(){
-        return distanceKm == 0? 0:(seconds /60.0)/distanceKm;
+
+    public double paceMinPerKm() {
+        return distanceKm == 0 ? 0 : (seconds / 60.0) / distanceKm;
     }
 
     public double getDistanceKm() {
@@ -136,18 +146,24 @@ public class Strotta {
     public void setCalisthenics(boolean calisthenics) {
         isCalisthenics = calisthenics;
     }
-    public String getTitle() { return title; }
-    public void setTitle(String t){ this.title = t; }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String t) {
+        this.title = t;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Strotta strotta = (Strotta) o;
-        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(date, strotta.date);
+        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && id == strotta.id && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && strengthReps == strotta.strengthReps && strengthSets == strotta.strengthSets && Double.compare(strengthWeight, strotta.strengthWeight) == 0 && strengthElapsedMs == strotta.strengthElapsedMs && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(title, strotta.title) && Objects.equals(date, strotta.date) && Objects.equals(strengthExerciseName, strotta.strengthExerciseName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, date, distanceKm, seconds);
+        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, id, title, date, distanceKm, seconds, strengthExerciseName, strengthReps, strengthSets, strengthWeight, strengthElapsedMs);
     }
 }

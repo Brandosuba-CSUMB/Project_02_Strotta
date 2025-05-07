@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaViewModel;
@@ -38,6 +39,11 @@ public class StrengthActivity extends FragmentActivity {
         setContentView(binding.getRoot());
         timeTv = binding.timeTv;
         userId = getIntent().getIntExtra("user_id", -1);
+        strottaAdapter = new StrottaAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(strottaAdapter);
+        StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().getStrengthLogsByUserId(userId).observe(this,logs -> strottaAdapter.submitList(logs));
+
         binding.recordBtn.setOnClickListener(v -> {
             startRealtime = SystemClock.elapsedRealtime();
             binding.recordBtn.setEnabled(false);
@@ -67,7 +73,7 @@ public class StrengthActivity extends FragmentActivity {
         startRealtime = 0L;
         timeTv.setText("00:00");
 
-        Intent intent = StrengthLogActivity.strengthLogIntentFactory(this, elapsedMs);
+        Intent intent = StrengthLogActivity.strengthLogIntentFactory(this, elapsedMs,userId);
         startActivity(intent);
     }
 
