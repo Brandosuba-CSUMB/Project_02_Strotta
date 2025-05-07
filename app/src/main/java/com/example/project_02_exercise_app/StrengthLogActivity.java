@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_02_exercise_app.R;
 import com.example.project_02_exercise_app.database.StrottaDatabase;
+import com.example.project_02_exercise_app.database.StrottaRepository;
+import com.example.project_02_exercise_app.database.entities.Strength;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
@@ -23,35 +25,29 @@ import java.util.concurrent.Executors;
 public class StrengthLogActivity extends AppCompatActivity {
 
     private long elapsed;
+    private StrottaRepository repository;
     private StrottaAdapter strottaAdapter;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_strength_log);
 
-        EditText exerciseInput = findViewById(R.id.strengthExerciseInputEditTextView);
-        EditText weightInput = findViewById(R.id.strengthWeightInputEditTextView);
-        EditText repsInput = findViewById(R.id.strengthRepsInputEditTextView);
-        EditText setsInput = findViewById(R.id.strengthSetsInputEditTextView);
+        EditText exerciseInput = findViewById(R.id.exerciseInputEditTextView);
+        EditText weightInput = findViewById(R.id.weightInputEditTextView);
+        EditText repsInput = findViewById(R.id.repsInputEditTextView);
+        EditText setsInput = findViewById(R.id.setsInputEditTextView);
         TextView timeTv = findViewById(R.id.time_tv);
-        Button logBtn = findViewById(R.id.strengthLog_btn);
-
-        RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        strottaAdapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
-        recyclerView.setAdapter(strottaAdapter);
+        Button logBtn = findViewById(R.id.log_btn);
 
         elapsed = getIntent().getLongExtra("duration_ms", 0);
-
         long s = elapsed / 1000;
         long mm = (s % 3600) / 60;
         long hh = s / 3600;
         long ss = s % 60;
         String timeStr = hh > 0 ? String.format("%d:%02d:%02d", hh, mm, ss) : String.format("%02d:%02d", mm, ss);
         timeTv.setText(timeStr);
-
-        loadLogs();
 
         logBtn.setOnClickListener(v -> {
             String exercise = exerciseInput.getText().toString().trim();
@@ -68,21 +64,21 @@ public class StrengthLogActivity extends AppCompatActivity {
             int sets = Integer.parseInt(setsStr);
             int reps = Integer.parseInt(repsStr);
 
-            Strotta strottaLog = new Strotta(0, exercise, weight, sets, reps, elapsed);
-            strottaLog.setDate(LocalDateTime.now());
+            Strength strengthLog = new Strength(0, exercise, weight, sets, reps, elapsed);
+            strengthLog.setDate(LocalDateTime.now());
 
             Executors.newSingleThreadExecutor().execute(() -> {
-                StrottaDatabase.getDatabase(getApplicationContext()).strottaDAO().insert(strottaLog);
+                StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().insert(strengthLog);
             });
         });
     }
 
-    private void loadLogs() {
-        StrottaDatabase.getDatabase(getApplicationContext())
-                .strottaDAO()
-                .getAllStrengthLogs()
-                .observe(this, logs -> strottaAdapter.submitList(logs));
-    }
+//    private void loadLogs() {
+//        StrottaDatabase.getDatabase(getApplicationContext())
+//                .strottaDAO()
+//                .getAllStrengthLogs()
+//                .observe(this, logs -> strottaAdapter.submitList(logs));
+//    }
 
 
     public static Intent strengthLogIntentFactory(Context context, long elapsedMs) {

@@ -1,0 +1,123 @@
+Index: app/src/main/res/layout/activity_admin.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@drawable/bg_app_gradient\"\r\n    android:fitsSystemWindows=\"true\">\r\n\r\n    <LinearLayout\r\n        android:id=\"@+id/admin_layout\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"0dp\"\r\n        android:orientation=\"vertical\"\r\n        android:padding=\"16dp\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/delete_all_runs_btn\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/admin_title\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"24dp\"\r\n            android:layout_marginStart=\"24dp\"\r\n            android:text=\"All Users\"\r\n            android:textSize=\"20sp\"\r\n            android:textStyle=\"bold\"\r\n            android:textColor=\"@android:color/white\"\r\n            app:layout_constraintTop_toTopOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            />\r\n\r\n        <com.google.android.material.card.MaterialCardView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"250dp\"\r\n            android:layout_marginBottom=\"8dp\"\r\n            app:cardCornerRadius=\"8dp\">\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/user_recycler_view\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:background=\"@color/black\"\r\n                tools:listitem=\"@layout/user_item\"/>\r\n        </com.google.android.material.card.MaterialCardView>\r\n        <TextView\r\n            android:id=\"@+id/selected_user_title\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"16dp\"\r\n            android:layout_marginStart=\"24dp\"\r\n            android:text=\"All Logged Runs\"\r\n            android:textSize=\"18sp\"\r\n            android:textStyle=\"italic\"\r\n            android:textColor=\"@android:color/white\"\r\n            app:layout_constraintTop_toBottomOf=\"@id/user_recycler_view\"\r\n            app:layout_constraintStart_toStartOf=\"parent\" />\r\n\r\n        <com.google.android.material.card.MaterialCardView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_weight=\"1\"\r\n            android:layout_margin=\"24dp\"\r\n            app:cardCornerRadius=\"12dp\"\r\n            app:cardElevation=\"8dp\"\r\n            app:layout_constraintBottom_toTopOf=\"@id/delete_all_runs_btn\"\r\n            app:layout_constraintEnd_toEndOf=\"parent\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            app:layout_constraintTop_toBottomOf=\"@id/selected_user_title\">\r\n\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/run_recycler_view\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:background=\"@color/black\"\r\n                tools:listitem=\"@layout/strotta_recycler_item\" />\r\n\r\n        </com.google.android.material.card.MaterialCardView>\r\n\r\n\r\n    </LinearLayout>\r\n\r\n\r\n    <com.google.android.material.button.MaterialButton\r\n        android:id=\"@+id/delete_all_runs_btn\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_margin=\"24dp\"\r\n        android:text=\"Delete All Runs\"\r\n        android:textColor=\"@android:color/white\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_admin.xml b/app/src/main/res/layout/activity_admin.xml
+--- a/app/src/main/res/layout/activity_admin.xml	(revision 15c24dab830002b087f33602fb57681d2981f6b6)
++++ b/app/src/main/res/layout/activity_admin.xml	(date 1746576433047)
+@@ -52,7 +52,7 @@
+             android:layout_marginStart="24dp"
+             android:text="All Logged Runs"
+             android:textSize="18sp"
+-            android:textStyle="italic"
++            android:textStyle="bold"
+             android:textColor="@android:color/white"
+             app:layout_constraintTop_toBottomOf="@id/user_recycler_view"
+             app:layout_constraintStart_toStartOf="parent" />
+Index: app/src/main/java/com/example/project_02_exercise_app/StrengthActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.os.SystemClock;\r\nimport android.widget.TextView;\r\nimport androidx.fragment.app.FragmentActivity;\r\n\r\nimport com.example.project_02_exercise_app.databinding.ActivityCardioBinding;\r\nimport com.example.project_02_exercise_app.databinding.ActivityStrengthBinding;\r\n\r\npublic class StrengthActivity extends FragmentActivity {\r\n\r\n    private ActivityStrengthBinding binding;\r\n    private int weight = 0;\r\n    private String exerciseType = null;\r\n    private int userId = 0;\r\n    private static final String STRENGTH_ACTIVITY_USER_ID = \"com.example.project_02_exercise_app\";\r\n    private long elapsedMs = 0;\r\n    private long startRealtime = 0L;\r\n    private TextView timeTv;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        binding = ActivityStrengthBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n\r\n        timeTv = binding.timeTv;\r\n\r\n        binding.recordBtn.setOnClickListener(v -> {\r\n            startRealtime = SystemClock.elapsedRealtime();\r\n            binding.recordBtn.setEnabled(false);\r\n            binding.stopBtn.setEnabled(true);\r\n            binding.statsBar.post(tick);\r\n        });\r\n\r\n        binding.stopBtn.setOnClickListener(v -> stopRecording());\r\n    }\r\n\r\n    private void stopRecording() {\r\n        binding.recordBtn.setEnabled(true);\r\n        binding.stopBtn.setEnabled(false);\r\n        elapsedMs = 0;\r\n        timeTv.setText(\"00:00\");\r\n        binding.statsBar.removeCallbacks(tick);\r\n        startRealtime = 0L;\r\n    }\r\n\r\n    private void updateStatsUI() {\r\n        long s = elapsedMs / 1000;\r\n        long mm = (s % 3600) / 60;\r\n        long hh = s / 3600;\r\n        long ss = s % 60;\r\n\r\n        timeTv.setText(hh > 0\r\n                ? String.format(\"%d:%02d:%02d\", hh, mm, ss)\r\n                : String.format(\"%02d:%02d\", mm, ss));\r\n    }\r\n\r\n    private final Runnable tick = new Runnable() {\r\n        @Override\r\n        public void run() {\r\n            if (startRealtime == 0L) return;\r\n            elapsedMs = SystemClock.elapsedRealtime() - startRealtime;\r\n            updateStatsUI();\r\n            binding.statsBar.postDelayed(this, 1000);\r\n        }\r\n    };\r\n\r\n    public static Intent strengthIntentFactory(Context context) {\r\n        return new Intent(context, StrengthActivity.class);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/StrengthActivity.java b/app/src/main/java/com/example/project_02_exercise_app/StrengthActivity.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/StrengthActivity.java	(revision 15c24dab830002b087f33602fb57681d2981f6b6)
++++ b/app/src/main/java/com/example/project_02_exercise_app/StrengthActivity.java	(date 1746577206507)
+@@ -5,30 +5,39 @@
+ import android.os.Bundle;
+ import android.os.SystemClock;
+ import android.widget.TextView;
++
+ import androidx.fragment.app.FragmentActivity;
++import androidx.lifecycle.ViewModelProvider;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
+ 
+-import com.example.project_02_exercise_app.databinding.ActivityCardioBinding;
++import com.example.project_02_exercise_app.database.entities.Strotta;
++import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
++import com.example.project_02_exercise_app.database.viewHolders.StrottaViewModel;
+ import com.example.project_02_exercise_app.databinding.ActivityStrengthBinding;
+ 
++import java.util.ArrayList;
++import java.util.List;
++
+ public class StrengthActivity extends FragmentActivity {
+ 
+     private ActivityStrengthBinding binding;
+-    private int weight = 0;
+-    private String exerciseType = null;
+-    private int userId = 0;
+-    private static final String STRENGTH_ACTIVITY_USER_ID = "com.example.project_02_exercise_app";
+     private long elapsedMs = 0;
+     private long startRealtime = 0L;
+     private TextView timeTv;
+ 
++    private RecyclerView recyclerView;
++    private StrottaAdapter strottaAdapter;
++    private StrottaViewModel strottaViewModel;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         binding = ActivityStrengthBinding.inflate(getLayoutInflater());
+         setContentView(binding.getRoot());
+ 
++        // Timer setup
+         timeTv = binding.timeTv;
+-
+         binding.recordBtn.setOnClickListener(v -> {
+             startRealtime = SystemClock.elapsedRealtime();
+             binding.recordBtn.setEnabled(false);
+@@ -37,16 +46,31 @@
+         });
+ 
+         binding.stopBtn.setOnClickListener(v -> stopRecording());
++
++        RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
++        strottaAdapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
++        recyclerView.setLayoutManager(new LinearLayoutManager(this));
++        recyclerView.setAdapter(strottaAdapter);
++
++        strottaViewModel = new ViewModelProvider(this).get(StrottaViewModel.class);
++        strottaViewModel.getAllStrengthLogs().observe(this, strottas -> {
++            // Update adapter with only strength logs
++            strottaAdapter.submitList(strottas);
++        });
+     }
+ 
+     private void stopRecording() {
+         binding.recordBtn.setEnabled(true);
+         binding.stopBtn.setEnabled(false);
+-        elapsedMs = 0;
+-        timeTv.setText("00:00");
+         binding.statsBar.removeCallbacks(tick);
++        elapsedMs = SystemClock.elapsedRealtime() - startRealtime;
+         startRealtime = 0L;
++        timeTv.setText("00:00");
++
++        Intent intent = StrengthLogActivity.strengthLogIntentFactory(this, elapsedMs);
++        startActivity(intent);
+     }
++
+ 
+     private void updateStatsUI() {
+         long s = elapsedMs / 1000;
+Index: app/src/main/java/com/example/project_02_exercise_app/StrengthLogActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/StrengthLogActivity.java b/app/src/main/java/com/example/project_02_exercise_app/StrengthLogActivity.java
+new file mode 100644
+--- /dev/null	(date 1746577259551)
++++ b/app/src/main/java/com/example/project_02_exercise_app/StrengthLogActivity.java	(date 1746577259551)
+@@ -0,0 +1,4 @@
++package com.example.project_02_exercise_app;
++
++public class StrengthLogActivity {
++}

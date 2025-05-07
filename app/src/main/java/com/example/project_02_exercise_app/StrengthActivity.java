@@ -25,6 +25,7 @@ public class StrengthActivity extends FragmentActivity {
     private long elapsedMs = 0;
     private long startRealtime = 0L;
     private TextView timeTv;
+    private int userId = -1;
 
     private RecyclerView recyclerView;
     private StrottaAdapter strottaAdapter;
@@ -35,9 +36,8 @@ public class StrengthActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityStrengthBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // Timer setup
         timeTv = binding.timeTv;
+        userId = getIntent().getIntExtra("user_id", -1);
         binding.recordBtn.setOnClickListener(v -> {
             startRealtime = SystemClock.elapsedRealtime();
             binding.recordBtn.setEnabled(false);
@@ -48,12 +48,12 @@ public class StrengthActivity extends FragmentActivity {
         binding.stopBtn.setOnClickListener(v -> stopRecording());
 
         RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
-        strottaAdapter = new StrottaAdapter(new StrottaAdapter.StrottaDiff());
+        strottaAdapter = new StrottaAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(strottaAdapter);
 
         strottaViewModel = new ViewModelProvider(this).get(StrottaViewModel.class);
-        strottaViewModel.getAllStrengthLogs().observe(this, strottas -> {
+        strottaViewModel.getAllLogsById(userId).observe(this, strottas -> {
             // Update adapter with only strength logs
             strottaAdapter.submitList(strottas);
         });
@@ -93,7 +93,7 @@ public class StrengthActivity extends FragmentActivity {
         }
     };
 
-    public static Intent strengthIntentFactory(Context context) {
-        return new Intent(context, StrengthActivity.class);
+    public static Intent strengthIntentFactory(Context context, int userId) {
+        return new Intent(context, StrengthActivity.class).putExtra("user_id",userId);
     }
 }

@@ -83,17 +83,38 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/repsLabelTextView"
         app:layout_constraintStart_toEndOf="@+id/repsLabelTextView" />
 
+    <TextView
+        android:id="@+id/setsLabelTextView"
+        android:layout_width="100dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Sets"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repsLabelTextView" />
+    <EditText
+        android:id="@+id/setsInputEditTextView"
+        android:layout_width="273dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:hint="Enter sets"
+        android:inputType="number|numberDecimal"
+        android:padding="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/repsLabelTextView"
+        app:layout_constraintStart_toEndOf="@+id/setsLabelTextView" />
+
     <Button
         android:id="@+id/log_btn"
-        android:text="Log!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:text="Log!"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView"
-        android:layout_marginTop="40dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView" />
 
     <ScrollView
         android:id="@+id/log_scroll"
