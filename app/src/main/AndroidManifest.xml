@@ -43,7 +43,8 @@
         <activity android:name=".CalisthenicsActivity" />
         <activity android:name=".CalisthenicsLogActivity" />
         <activity android:name=".AdminActivity" />
-
+        <activity android:name=".StrengthActivity" />
+        <activity android:name=".StrengthLogActivity" />
         <activity android:name=".LoginActivity"
             android:exported="true">
         <intent-filter>

@@ -16,11 +16,13 @@ import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.database.typeConverters.LocalDateTypeConverter;
+import com.example.project_02_exercise_app.database.entities.Strength;
+
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class,Strength.class}, version = 2, exportSchema = false)
 
 public abstract class StrottaDatabase extends RoomDatabase {
 
@@ -73,8 +75,8 @@ public abstract class StrottaDatabase extends RoomDatabase {
         }
     };
     public abstract StrottaDAO strottaDAO();
-
     public abstract UserDAO userDAO();
     public abstract RunDAO runDAO();
+    public abstract StrengthDAO strengthDAO();
 
 }

@@ -1,15 +1,20 @@
 package com.example.project_02_exercise_app.database.entities;
 
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
+@Entity(tableName = "strength_table")
 public class Strength {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String strengthExerciseName;
     private int strengthReps;
     private int userId;
     private int strengthSets;
-
     private double strengthWeight;
     private long strengthElapsedMs;
     private LocalDateTime date;
@@ -39,6 +44,14 @@ public class Strength {
                 "\nReps: " + strengthReps +
                 "\nElapsed Time: " + timeFormatted +
                 "\nDate: " + date.format(formatter);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getStrengthExerciseName() {
