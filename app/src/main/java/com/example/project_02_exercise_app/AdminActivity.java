@@ -1,6 +1,7 @@
 package com.example.project_02_exercise_app;
 import android.os.Bundle;
 import android.widget.Button;
+
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,13 @@ import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
+
 import com.example.project_02_exercise_app.database.viewHolders.UserAdapter;
 
 public class AdminActivity extends AppCompatActivity {
     private RunAdapter runAdapter;
     private StrottaAdapter strottaAdapter;
+
     private UserAdapter userAdapter;
     private TextView selectedUserTitle;
 

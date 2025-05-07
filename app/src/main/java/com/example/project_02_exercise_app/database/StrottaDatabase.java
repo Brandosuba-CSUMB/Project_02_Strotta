@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
 @Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class,Strength.class}, version = 2, exportSchema = false)
 
+
 public abstract class StrottaDatabase extends RoomDatabase {
 
     public static final String USER_TABLE = "usertable";

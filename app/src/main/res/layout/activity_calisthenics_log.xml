@@ -104,3 +104,4 @@
         tools:listitem="@layout/strotta_recycler_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -10,8 +10,8 @@ public class Calisthenics {
     private int id;
 
     private long totalTime;
-    private String title;
 
+    private String title;
 
     private long timeStamp;
 

@@ -33,6 +33,7 @@ public interface StrottaDAO {
     @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE)
     void deleteAll();
 
+
     //DO NOT USE FOR PROGRAM TESTING PURPOSES ONLY!!
     @Query("SELECT * FROM strottaTable WHERE userId = :uid")
     List<Strotta>getAllLogsByUserIdSync(int uid);

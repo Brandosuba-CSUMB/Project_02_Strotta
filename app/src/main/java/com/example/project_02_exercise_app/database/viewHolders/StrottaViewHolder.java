@@ -15,15 +15,18 @@ import java.util.Locale;
 
 public class StrottaViewHolder extends RecyclerView.ViewHolder {
     private final TextView headline, sub;
+
     private final TextView titleView;
     private StrottaViewHolder(View v){
         super(v);
         titleView = v.findViewById(R.id.logTitleTextView);
+
         headline = v.findViewById(R.id.tvHeadline);
         sub = v.findViewById(R.id.tvSub);
     }
     public void bind(Strotta s){
         int totalSec = s.getSeconds();
+
         titleView.setText(s.getTitle());
 
         String summary;
@@ -31,6 +34,7 @@ public class StrottaViewHolder extends RecyclerView.ViewHolder {
             double pace = s.paceMinPerKm();
             int paceMin = (int) pace;
             int paceSec = (int) ((pace - paceMin) * 60);
+
             summary = String.format(Locale.US,
                     "%.2f km   |   %d sec   |   %02d:%02d km/min",
                     s.getDistanceKm(),
@@ -52,6 +56,7 @@ public class StrottaViewHolder extends RecyclerView.ViewHolder {
         sub.setText(
                 s.getDate().format(DateTimeFormatter.ofPattern("MMM d, yyyy • h:mm a"))
         );
+
     }
 
     int getHours(int totalSec) {

@@ -12,15 +12,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp">
+
         <TextView
             android:id="@+id/logTitleTextView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Activity"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:padding="8dp"/>
+
         <TextView
             android:id="@+id/tvHeadline"
             android:layout_width="match_parent"
