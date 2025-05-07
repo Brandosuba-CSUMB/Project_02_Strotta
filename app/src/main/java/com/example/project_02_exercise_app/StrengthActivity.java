@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.viewHolders.StrengthAdapter;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaViewModel;
 import com.example.project_02_exercise_app.databinding.ActivityStrengthBinding;
@@ -29,6 +30,7 @@ public class StrengthActivity extends FragmentActivity {
     private int userId = -1;
 
     private RecyclerView recyclerView;
+    private StrengthAdapter strengthAdapter;
     private StrottaAdapter strottaAdapter;
     private StrottaViewModel strottaViewModel;
 
@@ -39,10 +41,13 @@ public class StrengthActivity extends FragmentActivity {
         setContentView(binding.getRoot());
         timeTv = binding.timeTv;
         userId = getIntent().getIntExtra("user_id", -1);
-        strottaAdapter = new StrottaAdapter();
+
+        recyclerView = findViewById(R.id.strengthRecycler);
+        strengthAdapter = new StrengthAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(strottaAdapter);
-        StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().getStrengthLogsByUserId(userId).observe(this,logs -> strottaAdapter.submitList(logs));
+        recyclerView.setAdapter(strengthAdapter);
+
+        StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().getStrengthLogsByUserId(userId).observe(this,logs -> strengthAdapter.submitList(logs));
 
         binding.recordBtn.setOnClickListener(v -> {
             startRealtime = SystemClock.elapsedRealtime();
@@ -52,17 +57,6 @@ public class StrengthActivity extends FragmentActivity {
         });
 
         binding.stopBtn.setOnClickListener(v -> stopRecording());
-
-        RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
-        strottaAdapter = new StrottaAdapter();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(strottaAdapter);
-
-        strottaViewModel = new ViewModelProvider(this).get(StrottaViewModel.class);
-        strottaViewModel.getAllLogsById(userId).observe(this, strottas -> {
-            // Update adapter with only strength logs
-            strottaAdapter.submitList(strottas);
-        });
     }
 
     private void stopRecording() {

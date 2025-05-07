@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.entities.User;
@@ -32,5 +33,12 @@ public interface StrottaDAO {
     @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE)
     void deleteAll();
 
+    //DO NOT USE FOR PROGRAM TESTING PURPOSES ONLY!!
+    @Query("SELECT * FROM strottaTable WHERE userId = :uid")
+    List<Strotta>getAllLogsByUserIdSync(int uid);
 
+    @Query("SELECT * FROM strottaTable WHERE id = :id")
+    Strotta getIdSync(int id);
+    @Update
+    void update(Strotta inserted);
 }

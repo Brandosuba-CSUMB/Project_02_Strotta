@@ -17,6 +17,7 @@ import com.example.project_02_exercise_app.database.StrottaDatabase;
 import com.example.project_02_exercise_app.database.StrottaRepository;
 import com.example.project_02_exercise_app.database.entities.Strength;
 import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.viewHolders.StrengthAdapter;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class StrengthLogActivity extends AppCompatActivity {
     private long elapsed;
     private StrottaRepository repository;
     private StrottaAdapter strottaAdapter;
+    private StrengthAdapter strengthAdapter;
     private int userId;
 
     @Override
@@ -42,14 +44,20 @@ public class StrengthLogActivity extends AppCompatActivity {
         Button logBtn = findViewById(R.id.log_btn);
 
         elapsed = getIntent().getLongExtra("duration_ms", 0);
+        userId = getIntent().getIntExtra("user_id", -1);
         long s = elapsed / 1000;
         long mm = (s % 3600) / 60;
         long hh = s / 3600;
         long ss = s % 60;
         String timeStr = hh > 0 ? String.format("%d:%02d:%02d", hh, mm, ss) : String.format("%02d:%02d", mm, ss);
         timeTv.setText(timeStr);
-
-        logBtn.setOnClickListener(v -> {
+        RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
+        strengthAdapter = new StrengthAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(strengthAdapter);
+        StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().getStrengthLogsByUserId(userId).observe(this,logs ->strengthAdapter.submitList(logs));
+        Button logbtn = findViewById(R.id.log_btn);
+        logbtn.setOnClickListener(v -> {
             String exercise = exerciseInput.getText().toString().trim();
             String weightStr = weightInput.getText().toString().trim();
             String setsStr = setsInput.getText().toString().trim();
