@@ -185,12 +185,14 @@ public class CardioActivity extends FragmentActivity implements OnMapReadyCallba
         double km = distM / 1000.0;
 
         int seconds = (int) (elapsedMs /1000);
+
         Strotta cardioLog = new Strotta(userId,km,seconds);
         String title = "Cardio session - " + java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM d, h:mm a"));
         cardioLog.setTitle(title);
 
         StrottaRepository repository = StrottaRepository.getRepository(getApplication());
         repository.insertStrottaRepository(cardioLog);
+
 
         /* reset UI */
         binding.recordBtn.setEnabled(true);

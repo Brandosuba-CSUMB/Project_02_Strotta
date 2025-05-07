@@ -75,7 +75,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/log_run"
         android:textSize="18sp"
-
         app:layout_constraintTop_toBottomOf="@id/statsCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

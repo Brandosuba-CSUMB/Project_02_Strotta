@@ -31,6 +31,4 @@ public interface StrottaDAO {
     LiveData<List<Strotta>> getAll();
     @Query("DELETE FROM " + StrottaDatabase.STROTTA_TABLE)
     void deleteAll();
-
-
 }

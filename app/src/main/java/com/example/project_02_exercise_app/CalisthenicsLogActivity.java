@@ -47,9 +47,11 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
     String exercise = null;
     double bodyWeight = 0.0;
     private int userId;
+
     private Calisthenics calisthenics;
     private  Strotta strotta;
     private User user;
+  
     private EditText exerciseInput;
     private EditText weightInput;
     private TextView logHistoryTextView;
@@ -59,6 +61,7 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCalisthenicsLogBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         repository = StrottaRepository.getRepository(getApplication());
 
         Intent i = getIntent();
@@ -79,6 +82,7 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
 
         TextView timeTv = findViewById(R.id.time_tv);
         Button logBtn = findViewById(R.id.log_btn);
+
         long secs = elapsed / 1000;
         long mm   = (secs % 3600) / 60;
         long ss   = secs % 60;
@@ -98,24 +102,27 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
                     Toast.makeText(CalisthenicsLogActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
+              
                 try {
                     bodyWeight = Double.parseDouble(weightInput.getText().toString());
                 } catch (NumberFormatException e) {
                     Log.d(TAG, "Error reading body weight.");
                 }
                 Strotta s = new Strotta(userId, exercise, bodyWeight);
+
                 String title = "Calisthenics Activity - " + java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM d, h:mm a"));
                 s.setTitle(title);
                 repository.insertStrottaRepository(s);
                 finish();
             }
         });
-
+      
         RecyclerView recyclerView = findViewById(R.id.calisthenics_recycler);
         StrottaAdapter adapter = new StrottaAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
 
         adapter.setOnItemLongClick(log -> {

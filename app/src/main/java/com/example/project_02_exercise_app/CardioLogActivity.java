@@ -33,6 +33,7 @@ public class CardioLogActivity extends AppCompatActivity {
     private float distance;
     private long elapsed;
     private int userId;
+
     private Run run;
     private TextView logHistoryTextView;
 
@@ -70,6 +71,7 @@ public class CardioLogActivity extends AppCompatActivity {
         logBtn.setOnClickListener(v -> {
             finish();
         });
+      
         if (userId == -1) {
             SharedPreferences prefs = getSharedPreferences(
                     getString(R.string.preference_file_key), MODE_PRIVATE);

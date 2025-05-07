@@ -13,6 +13,7 @@ import com.example.project_02_exercise_app.database.entities.Strotta;
 import java.util.function.Consumer;
 
 public class StrottaAdapter extends ListAdapter<Strotta, StrottaViewHolder> {
+
     private java.util.function.Consumer<Strotta> longClickListener;
 
     public StrottaAdapter() {
@@ -26,6 +27,7 @@ public class StrottaAdapter extends ListAdapter<Strotta, StrottaViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull StrottaViewHolder holder, int position) {
+
         Strotta s = getItem(position);
         holder.bind(s);
         holder.itemView.setOnClickListener(view -> {
@@ -38,12 +40,13 @@ public class StrottaAdapter extends ListAdapter<Strotta, StrottaViewHolder> {
         longClickListener = l;
     }
 
-
     private static final DiffUtil.ItemCallback<Strotta> StrottaDiff =
             new DiffUtil.ItemCallback<Strotta>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem) {
+
                     return oldItem.getUserId() == newItem.getUserId();
+
                 }
                 @Override
                 public boolean areContentsTheSame(@NonNull Strotta oldItem, @NonNull Strotta newItem) {
