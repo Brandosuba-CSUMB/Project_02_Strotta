@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app_gradient"
+    android:fitsSystemWindows="true">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,86 +15,87 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="30dp" />
-
+        android:layout_marginTop="32dp"/>
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginTop="16dp"
+    android:elevation="4dp"
+    app:layout_constraintTop_toBottomOf="@+id/time_tv"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
     <TextView
         android:id="@+id/exerciseLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/exercise"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_tv" />
+ />
 
     <EditText
         android:id="@+id/exerciseInputEditTextView"
-        android:layout_width="273dp"
-        android:layout_height="39dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:hint="@string/enter_an_exercise"
         android:inputType="textAutoComplete"
         android:padding="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/exerciseLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/exerciseLabelTextView" />
+/>
 
     <TextView
         android:id="@+id/weightLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/weight"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseLabelTextView" />
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/weightInputEditTextView"
-        android:layout_width="273dp"
-        android:layout_height="39dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:hint="Weight"
         android:inputType="number|numberDecimal"
-        android:padding="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/weightLabelTextView" />
-
+   />
     <TextView
         android:id="@+id/repsLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Reps"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightLabelTextView" />
+       />
     <EditText
         android:id="@+id/repsInputEditTextView"
-        android:layout_width="273dp"
-        android:layout_height="39dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:hint="Enter reps"
         android:inputType="number|numberDecimal"
-        android:padding="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/repsLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/repsLabelTextView" />
+  />
 
     <TextView
         android:id="@+id/setsLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Sets"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repsLabelTextView" />
+        android:textSize="24sp" />
     <EditText
         android:id="@+id/setsInputEditTextView"
         android:layout_width="273dp"
@@ -100,21 +103,15 @@
         android:layout_marginStart="8dp"
         android:hint="Enter sets"
         android:inputType="number|numberDecimal"
-        android:padding="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/repsLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/setsLabelTextView" />
+ />
 
     <Button
         android:id="@+id/log_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="16dp"
         android:text="Log!"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView" />
+        android:textSize="18sp" />
 
     <ScrollView
         android:id="@+id/log_scroll"
@@ -126,7 +123,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/log_btn">
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/log_history_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -134,5 +131,7 @@
             android:text="Logged Workouts:\n"
             android:textSize="16sp" />
     </ScrollView>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
