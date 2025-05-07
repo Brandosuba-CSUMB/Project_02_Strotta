@@ -92,6 +92,12 @@ public class CalisthenicsLogActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 exercise = exerciseInput.getText().toString();
+                String weight = weightInput.getText().toString();
+
+                if (exercise.isEmpty() || weight.isEmpty()) {
+                    Toast.makeText(CalisthenicsLogActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
                     bodyWeight = Double.parseDouble(weightInput.getText().toString());
                 } catch (NumberFormatException e) {
