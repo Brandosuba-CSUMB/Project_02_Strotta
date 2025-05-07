@@ -11,7 +11,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.project_02_exercise_app.database.StrottaDAO;
 import com.example.project_02_exercise_app.database.StrottaDatabase;
+import com.example.project_02_exercise_app.database.UserDAO;
 import com.example.project_02_exercise_app.database.entities.Strotta;
+import com.example.project_02_exercise_app.database.entities.User; // Import User entity
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,6 +26,7 @@ import java.util.List;
 public class CardioDAOTest {
 
     private StrottaDAO dao;
+    private UserDAO userDAO;
     private StrottaDatabase db;
 
     @Before
@@ -33,46 +36,41 @@ public class CardioDAOTest {
                 .allowMainThreadQueries()
                 .build();
         dao = db.strottaDAO();
+        User dummyUser = new User("Test User", "testpass");
+        dummyUser.setId(1);
+        db.userDAO().insert(dummyUser);
     }
 
     @After
     public void teardown() {
         db.close();
     }
-
     @Test
     public void testInsertCardioLog() throws Exception {
-        Strotta log = new Strotta(1, 3.5, 600); // userId = 1, 3.5km, 600s
+        Strotta log = new Strotta(1, 3.5, 600);
         dao.insert(log);
-
-        List<Strotta> logs = dao.getAllLogsByUserIdSync(1); // you'll need to create this sync version
+        List<Strotta> logs = dao.getAllLogsByUserIdSync(1);
         assertEquals(1, logs.size());
         assertEquals(3.5, logs.get(0).getDistanceKm(), 0.01);
     }
-
     @Test
     public void testUpdateCardioLog() throws Exception {
         Strotta log = new Strotta(1, 2.0, 300);
         dao.insert(log);
-
         List<Strotta> logs = dao.getAllLogsByUserIdSync(1);
         Strotta inserted = logs.get(0);
         inserted.setDistanceKm(4.2);
         dao.update(inserted);
-
-        Strotta updated = dao.getIdSync(inserted.getId()); // create this helper too
+        Strotta updated = dao.getIdSync(inserted.getId());
         assertEquals(4.2, updated.getDistanceKm(), 0.01);
     }
-
     @Test
     public void testDeleteCardioLog() throws Exception {
         Strotta log = new Strotta(1, 5.0, 900);
         dao.insert(log);
-
         List<Strotta> logs = dao.getAllLogsByUserIdSync(1);
         Strotta inserted = logs.get(0);
         dao.delete(inserted);
-
         List<Strotta> afterDelete = dao.getAllLogsByUserIdSync(1);
         assertTrue(afterDelete.isEmpty());
     }
