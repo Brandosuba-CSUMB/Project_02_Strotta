@@ -52,18 +52,22 @@ public class StrengthLogActivity extends AppCompatActivity {
         String timeStr = hh > 0 ? String.format("%d:%02d:%02d", hh, mm, ss) : String.format("%02d:%02d", mm, ss);
         timeTv.setText(timeStr);
         RecyclerView recyclerView = findViewById(R.id.strengthRecycler);
+
         strengthAdapter = new StrengthAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(strengthAdapter);
-        StrottaDatabase.getDatabase(getApplicationContext()).strengthDAO().getStrengthLogsByUserId(userId).observe(this,logs ->strengthAdapter.submitList(logs));
-        Button logbtn = findViewById(R.id.log_btn);
-        logbtn.setOnClickListener(v -> {
+
+        StrottaDatabase.getDatabase(getApplicationContext())
+                .strengthDAO().getStrengthLogsByUserId(userId)
+                .observe(this,logs ->strengthAdapter.submitList(logs));
+
+        logBtn.setOnClickListener(v -> {
             String exercise = exerciseInput.getText().toString().trim();
             String weightStr = weightInput.getText().toString().trim();
             String setsStr = setsInput.getText().toString().trim();
             String repsStr = repsInput.getText().toString().trim();
 
-            if (exercise.isEmpty() || weightStr.isEmpty() || repsStr.isEmpty()) {
+            if (exercise.isEmpty() || weightStr.isEmpty() ||setsStr.isEmpty()|| repsStr.isEmpty()) {
                 Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
                 return;
             }

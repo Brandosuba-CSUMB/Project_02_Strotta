@@ -31,20 +31,20 @@ import java.util.concurrent.Executors;
 
 public class CardioTrackingService extends LifecycleService {
 
-    public static final String ACTION_START   = "CardioTrackingService.ACTION_START";
-    public static final String ACTION_STOP    = "CardioTrackingService.ACTION_STOP";
-    public static final String ACTION_UPDATE  = "CardioTrackingService.ACTION_UPDATE";
+    public static final String ACTION_START = "CardioTrackingService.ACTION_START";
+    public static final String ACTION_STOP= "CardioTrackingService.ACTION_STOP";
+    public static final String ACTION_UPDATE = "CardioTrackingService.ACTION_UPDATE";
     public static final String EXTRA_LOCATION = "extra_location";
     public static final String EXTRA_DISTANCE = "extra_distance_m";
-    public static final String EXTRA_ELAPSED  = "extra_elapsed_ms";
+    public static final String EXTRA_ELAPSED = "extra_elapsed_ms";
     private static final String CHANNEL_ID = "cardio_tracking";
     private static final int NOTIF_ID = 42;
     private FusedLocationProviderClient fused;
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private Location lastLoc;
-    private float totalMeters   = 0f;
+    private float totalMeters = 0f;
     private float elevationGain = 0f;
-    private long startEpochMs  = 0L;
+    private long startEpochMs = 0L;
     private final String sessionId = UUID.randomUUID().toString();
 
     @Override public void onCreate() {
