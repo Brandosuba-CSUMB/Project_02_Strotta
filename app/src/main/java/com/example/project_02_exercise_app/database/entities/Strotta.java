@@ -28,6 +28,9 @@ public class Strotta {
 
     private boolean isCalisthenics = false;
     private int userId;
+    private int id;
+    public String title = "Activity";
+  
     private LocalDateTime date = LocalDateTime.now();
     private double distanceKm;
     private int seconds;
@@ -69,6 +72,14 @@ public class Strotta {
 
     public void setCardio(int cardio) {
         this.cardio = cardio;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getUserId() {
@@ -127,6 +138,9 @@ public class Strotta {
     public void setCalisthenics(boolean calisthenics) {
         isCalisthenics = calisthenics;
     }
+
+    public String getTitle() { return title; }
+    public void setTitle(String t){ this.title = t; }
 
     @Override
     public boolean equals(Object o) {

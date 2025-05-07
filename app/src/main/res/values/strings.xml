@@ -41,4 +41,5 @@
     <string name="reps">Reps</string>
     <string name="enter_reps">Enter reps</string>
     <string name="log_calisthenics">Log!</string>
+    <string name="calisthenics_activity">Calisthenics Activity</string>
 </resources>

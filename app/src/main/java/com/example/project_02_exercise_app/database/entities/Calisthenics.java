@@ -11,6 +11,8 @@ public class Calisthenics {
 
     private long totalTime;
 
+    private String title;
+
     private long timeStamp;
 
     public Calisthenics(long totalTime, long timeStamp) {
@@ -28,6 +30,14 @@ public class Calisthenics {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setTimeStamp(long timeStamp) {

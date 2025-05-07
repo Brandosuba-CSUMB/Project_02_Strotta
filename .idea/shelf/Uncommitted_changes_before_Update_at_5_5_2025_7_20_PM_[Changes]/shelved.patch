@@ -1,0 +1,59 @@
+Index: app/src/main/java/com/example/project_02_exercise_app/database/entities/Strotta.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app.database.entities;\r\n\r\nimport androidx.room.Entity;\r\nimport androidx.room.ForeignKey;\r\nimport androidx.room.Ignore;\r\nimport androidx.room.Index;\r\nimport androidx.room.PrimaryKey;\r\n\r\nimport com.example.project_02_exercise_app.LoginActivity;\r\nimport com.example.project_02_exercise_app.database.StrottaDatabase;\r\n\r\nimport java.time.LocalDateTime;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.Objects;\r\n\r\n@Entity(tableName = StrottaDatabase.STROTTA_TABLE, foreignKeys = @ForeignKey(\r\n        entity = User.class,\r\n        parentColumns = \"id\",\r\n        childColumns = \"userId\",\r\n        onDelete = ForeignKey.CASCADE\r\n),\r\nindices = @Index(\"userId\"))\r\npublic class Strotta {\r\n    @PrimaryKey(autoGenerate = true)\r\n    private int cardio;\r\n    private double bodyWeight;\r\n    private String calisthenicsExercise;\r\n\r\n    private boolean isCalisthenics = false;\r\n    private int userId;\r\n    private LocalDateTime date = LocalDateTime.now();\r\n    private double distanceKm;\r\n    private int seconds;\r\n\r\n    @Ignore                                    // ← tell Room to ignore this one\r\n    public Strotta(int userId, int cardioMin) {\r\n        this.userId     = userId;\r\n        this.distanceKm = 0;                   // unknown\r\n        this.seconds    = cardioMin * 60;      // at least duration is correct\r\n    }\r\n\r\n    /* --- canonical 3-arg ctor used by GPS screen --- */\r\n    public Strotta(int userId, double distanceKm, int seconds) {\r\n        this.userId     = userId;\r\n        this.distanceKm = distanceKm;\r\n        this.seconds    = seconds;\r\n    }\r\n\r\n    //This is for calisthenics\r\n    public Strotta(int userId, String exercise, double bodyWeight) {\r\n        this.userId = userId;\r\n        this.calisthenicsExercise = exercise;\r\n        this.bodyWeight = bodyWeight;\r\n        this.isCalisthenics = true;\r\n    }\r\n    @Override\r\n    public String toString() {\r\n        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"MMM dd, yyyy - hh:mm a\");\r\n\r\n        return \"Cardio: \" + cardio\r\n                + \"km\\n\" + \"Date: \" +\"\\n\" +\r\n                date.format(formatter);\r\n    }\r\n\r\n\r\n    public int getCardio() {\r\n        return cardio;\r\n    }\r\n\r\n    public void setCardio(int cardio) {\r\n        this.cardio = cardio;\r\n    }\r\n\r\n    public int getUserId() {\r\n        return userId;\r\n    }\r\n\r\n    public void setUserId(int userId) {\r\n        this.userId = userId;\r\n    }\r\n    public LocalDateTime getDate() {\r\n        return date;\r\n    }\r\n    public void setDate(LocalDateTime date) {\r\n        this.date = date;\r\n    }\r\n    public double paceMinPerKm(){\r\n        return distanceKm == 0? 0:(seconds /60.0)/distanceKm;\r\n    }\r\n\r\n    public double getDistanceKm() {\r\n        return distanceKm;\r\n    }\r\n\r\n    public void setDistanceKm(double distanceKm) {\r\n        this.distanceKm = distanceKm;\r\n    }\r\n\r\n    public int getSeconds() {\r\n        return seconds;\r\n    }\r\n\r\n    public void setSeconds(int seconds) {\r\n        this.seconds = seconds;\r\n    }\r\n\r\n    public double getBodyWeight() {\r\n        return bodyWeight;\r\n    }\r\n\r\n    public void setBodyWeight(double bodyWeight) {\r\n        this.bodyWeight = bodyWeight;\r\n    }\r\n\r\n    public String getCalisthenicsExercise() {\r\n        return calisthenicsExercise;\r\n    }\r\n\r\n    public void setCalisthenicsExercise(String calisthenicsExercise) {\r\n        this.calisthenicsExercise = calisthenicsExercise;\r\n    }\r\n\r\n    public boolean isCalisthenics() {\r\n        return isCalisthenics;\r\n    }\r\n\r\n    public void setCalisthenics(boolean calisthenics) {\r\n        isCalisthenics = calisthenics;\r\n    }\r\n\r\n    @Override\r\n    public boolean equals(Object o) {\r\n        if (o == null || getClass() != o.getClass()) return false;\r\n        Strotta strotta = (Strotta) o;\r\n        return cardio == strotta.cardio && Double.compare(bodyWeight, strotta.bodyWeight) == 0 && isCalisthenics == strotta.isCalisthenics && userId == strotta.userId && Double.compare(distanceKm, strotta.distanceKm) == 0 && seconds == strotta.seconds && Objects.equals(calisthenicsExercise, strotta.calisthenicsExercise) && Objects.equals(date, strotta.date);\r\n    }\r\n\r\n    @Override\r\n    public int hashCode() {\r\n        return Objects.hash(cardio, bodyWeight, calisthenicsExercise, isCalisthenics, userId, date, distanceKm, seconds);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/database/entities/Strotta.java b/app/src/main/java/com/example/project_02_exercise_app/database/entities/Strotta.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/database/entities/Strotta.java	(revision 85b9ca8d06c569c5369de251b16a0269f660c636)
++++ b/app/src/main/java/com/example/project_02_exercise_app/database/entities/Strotta.java	(date 1746497377566)
+@@ -25,7 +25,6 @@
+     private int cardio;
+     private double bodyWeight;
+     private String calisthenicsExercise;
+-
+     private boolean isCalisthenics = false;
+     private int userId;
+     private LocalDateTime date = LocalDateTime.now();
+Index: app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.project_02_exercise_app.database;\r\n\r\nimport android.content.Context;\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\nimport androidx.room.TypeConverters;\r\nimport androidx.sqlite.db.SupportSQLiteDatabase;\r\n\r\nimport com.example.project_02_exercise_app.MainActivity;\r\nimport com.example.project_02_exercise_app.database.entities.Run;\r\nimport com.example.project_02_exercise_app.database.entities.Strotta;\r\nimport com.example.project_02_exercise_app.database.entities.User;\r\nimport com.example.project_02_exercise_app.database.typeConverters.LocalDateTypeConverter;\r\n\r\nimport java.util.concurrent.ExecutorService;\r\nimport java.util.concurrent.Executors;\r\n@TypeConverters(LocalDateTypeConverter.class)\r\n@Database(entities = {User.class, Strotta.class, Run.class}, version = 2, exportSchema = false)\r\n\r\npublic abstract class StrottaDatabase extends RoomDatabase {\r\n\r\n    public static final String USER_TABLE = \"usertable\";\r\n    private static final String DATABASE_NAME = \"StrottaDatabase\";\r\n    public static final String STROTTA_TABLE = \"strottaTable\";\r\n\r\n\r\n    private static volatile StrottaDatabase INSTANCE;\r\n    private static final int NUMBER_OF_THREADS = 4;\r\n\r\n    public static final ExecutorService databaseWriteExecution = Executors.newFixedThreadPool(NUMBER_OF_THREADS);\r\n\r\n    public static StrottaDatabase getDatabase(final Context context){\r\n        if (INSTANCE == null) {\r\n            synchronized (StrottaDatabase.class){\r\n                if(INSTANCE == null){\r\n                    INSTANCE = Room.databaseBuilder(\r\n                                    context.getApplicationContext(),\r\n                                    StrottaDatabase.class,\r\n                                    DATABASE_NAME\r\n                            )\r\n                            .fallbackToDestructiveMigration()\r\n                            .addCallback(addDefaultValues)\r\n                            .build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n\r\n    public static final RoomDatabase.Callback addDefaultValues = new RoomDatabase.Callback(){\r\n        @Override\r\n        public void onCreate(@NonNull SupportSQLiteDatabase db){\r\n            super.onCreate(db);\r\n            Log.i(MainActivity.TAG, \"DATABASE CREATED\");\r\n            databaseWriteExecution.execute(()->{\r\n                UserDAO dao = INSTANCE.userDAO();\r\n                dao.deleteAll();\r\n\r\n                User admin = new User(\"admin1\",\"admin1\");\r\n                admin.setAdmin(true);\r\n                dao.insert(admin);\r\n\r\n                User testUser1 = new User(\"testuser1\", \"testuser1\");\r\n                dao.insert(testUser1);\r\n            });\r\n\r\n        }\r\n    };\r\n    public abstract StrottaDAO strottaDAO();\r\n\r\n    public abstract UserDAO userDAO();\r\n    public abstract RunDAO runDAO();\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java b/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java
+--- a/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java	(revision 85b9ca8d06c569c5369de251b16a0269f660c636)
++++ b/app/src/main/java/com/example/project_02_exercise_app/database/StrottaDatabase.java	(date 1746497377557)
+@@ -11,6 +11,7 @@
+ import androidx.sqlite.db.SupportSQLiteDatabase;
+ 
+ import com.example.project_02_exercise_app.MainActivity;
++import com.example.project_02_exercise_app.database.entities.Calisthenics;
+ import com.example.project_02_exercise_app.database.entities.Run;
+ import com.example.project_02_exercise_app.database.entities.Strotta;
+ import com.example.project_02_exercise_app.database.entities.User;
+@@ -19,7 +20,7 @@
+ import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.Executors;
+ @TypeConverters(LocalDateTypeConverter.class)
+-@Database(entities = {User.class, Strotta.class, Run.class}, version = 2, exportSchema = false)
++@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class}, version = 1, exportSchema = false)
+ 
+ public abstract class StrottaDatabase extends RoomDatabase {
+ 
+Index: app/src/main/java/com/example/project_02_exercise_app/database/entities/Cardio.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/project_02_exercise_app/database/entities/Cardio.java b/app/src/main/java/com/example/project_02_exercise_app/database/entities/Cardio.java
+new file mode 100644
+--- /dev/null	(date 1746497770949)
++++ b/app/src/main/java/com/example/project_02_exercise_app/database/entities/Cardio.java	(date 1746497770949)
+@@ -0,0 +1,4 @@
++package com.example.project_02_exercise_app.database.entities;
++
++public class Cardio {
++}

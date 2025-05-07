@@ -1,14 +1,18 @@
 package com.example.project_02_exercise_app;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +23,8 @@ import com.example.project_02_exercise_app.database.entities.Run;
 import com.example.project_02_exercise_app.database.entities.Strotta;
 import com.example.project_02_exercise_app.database.viewHolders.StrottaAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -27,6 +33,8 @@ public class CardioLogActivity extends AppCompatActivity {
     private float distance;
     private long elapsed;
     private int userId;
+
+    private Run run;
     private TextView logHistoryTextView;
 
     @Override
@@ -63,6 +71,7 @@ public class CardioLogActivity extends AppCompatActivity {
         logBtn.setOnClickListener(v -> {
             finish();
         });
+      
         if (userId == -1) {
             SharedPreferences prefs = getSharedPreferences(
                     getString(R.string.preference_file_key), MODE_PRIVATE);
@@ -83,6 +92,40 @@ public class CardioLogActivity extends AppCompatActivity {
         StrottaRepository repository = StrottaRepository.getRepository(getApplication());
         repository.getAllLogsByUserId(userId).observe(this, adapter ::submitList);
 
+
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(
+                        0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                    @Override public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,int d) {
+                        int pos = viewHolder.getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            Strotta doomed = adapter.getCurrentList().get(pos);
+                            repository.delete(doomed);
+                            Toast.makeText(CardioLogActivity.this,
+                                    "Log deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        helper.attachToRecyclerView(recyclerView);
+        adapter.setOnItemLongClick(log -> {
+            android.widget.EditText input = new android.widget.EditText(this);
+            input.setText(log.getTitle());
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Rename log")
+                    .setView(input)
+                    .setPositiveButton("Save",(d,w) ->
+                            repository.rename(log.getId(), input.getText().toString()))
+                    .setNegativeButton("Cancel",null)
+                    .show();
+        });
+        repository.getAllLogsByUserId(userId).observe(this, adapter::submitList);
     }
 
     private void loadRuns() {

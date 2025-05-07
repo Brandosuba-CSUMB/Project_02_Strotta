@@ -20,7 +20,8 @@ import com.example.project_02_exercise_app.database.typeConverters.LocalDateType
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class}, version = 5, exportSchema = false)
+
+@Database(entities = {User.class, Strotta.class, Run.class, Calisthenics.class}, version = 2, exportSchema = false)
 
 public abstract class StrottaDatabase extends RoomDatabase {
 

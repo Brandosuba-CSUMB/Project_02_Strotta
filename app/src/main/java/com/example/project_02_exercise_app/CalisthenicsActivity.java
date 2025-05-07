@@ -98,10 +98,6 @@ public class CalisthenicsActivity extends FragmentActivity {
                 .putExtra("duration_ms",  elapsedMs);
         startActivity(log);
 
-        int seconds = (int) (elapsedMs /1000);
-        StrottaRepository repository = StrottaRepository.getRepository(getApplication());
-        repository.insertStrottaRepository(new Strotta(userId, seconds));
-
         /* reset UI */
         binding.recordBtn.setEnabled(true);
         binding.stopBtn.setEnabled(false);
@@ -127,7 +123,7 @@ public class CalisthenicsActivity extends FragmentActivity {
 
             elapsedMs = SystemClock.elapsedRealtime() - startRealTime;
             updateStatsUI();// refresh timer & pace even if no GPS
-            binding.statsBar.postDelayed(this, 1);   // tick every 1 s
+            binding.statsBar.postDelayed(this, 1000);   // tick every 1 s
         }
     };
 

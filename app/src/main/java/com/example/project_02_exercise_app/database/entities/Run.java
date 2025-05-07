@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey;
 public class Run {
     @PrimaryKey(autoGenerate = true)
     private int id;
-
     private float distantMeters;
     private long totalTime;
     private long timeStamp;
+    private String title;
 
     public Run(float distantMeters, long totalTime, long timeStamp) {
         this.distantMeters = distantMeters;
@@ -48,5 +48,13 @@ public class Run {
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

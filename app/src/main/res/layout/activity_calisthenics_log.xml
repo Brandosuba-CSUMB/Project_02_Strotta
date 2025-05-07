@@ -1,117 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:background="@drawable/bg_app_gradient"
+    android:padding="24dp"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/time_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textColor="#FFFF"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="30dp" />
-
-    <TextView
-        android:id="@+id/exerciseLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/exercise"
-        android:textColor="#FFFF"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/time_tv" />
-
-    <EditText
-        android:id="@+id/exerciseInputEditTextView"
-        android:layout_width="273dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="8dp"
-        android:hint="@string/enter_an_exercise"
-        android:inputType="textAutoComplete"
-        android:padding="8dp"
-        android:textColor="#FFFF"
-        android:textColorHint="#FFFF"
-        app:layout_constraintBaseline_toBaselineOf="@+id/exerciseLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/exerciseLabelTextView" />
-
-    <TextView
-        android:id="@+id/weightLabelTextView"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/weight"
-        android:textColor="#FFFF"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseLabelTextView" />
-
-    <EditText
-        android:id="@+id/weightInputEditTextView"
-        android:layout_width="273dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="8dp"
-        android:hint="@string/enter_a_weight"
-        android:inputType="number|numberDecimal"
-        android:padding="8dp"
-        android:textColor="#FFFF"
-        android:textColorHint="#FFFF"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weightLabelTextView"
-        app:layout_constraintStart_toEndOf="@+id/weightLabelTextView" />
-
-    <Button
-        android:id="@+id/log_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/log_calisthenics"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightInputEditTextView" />
-
-    <ScrollView
-        android:id="@+id/log_scroll"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/inputCard"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/log_btn">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/log_history_tv"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:text="Logged Runs:\n"
-            android:textColor="#FFFF"
-            android:textSize="16sp" />
-    </ScrollView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/logTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calisthenics_activity"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/exerciseLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exercise"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="12dp" />
+
+            <EditText
+                android:id="@+id/exerciseInputEditTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_an_exercise"
+                android:inputType="textAutoComplete"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/weightLabelTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="12dp" />
+
+            <EditText
+                android:id="@+id/weightInputEditTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_a_weight"
+                android:inputType="number|numberDecimal"
+                android:padding="8dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white" />
+
+            <Button
+                android:id="@+id/log_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/log_run"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calisthenics_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputCard"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/log_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/strotta_recycler_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

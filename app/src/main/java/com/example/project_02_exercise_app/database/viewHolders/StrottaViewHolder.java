@@ -15,13 +15,19 @@ import java.util.Locale;
 
 public class StrottaViewHolder extends RecyclerView.ViewHolder {
     private final TextView headline, sub;
+
+    private final TextView titleView;
     private StrottaViewHolder(View v){
         super(v);
+        titleView = v.findViewById(R.id.logTitleTextView);
+
         headline = v.findViewById(R.id.tvHeadline);
         sub = v.findViewById(R.id.tvSub);
     }
     public void bind(Strotta s){
         int totalSec = s.getSeconds();
+
+        titleView.setText(s.getTitle());
 
         String summary;
         if (!s.isCalisthenics()) {
@@ -41,7 +47,7 @@ public class StrottaViewHolder extends RecyclerView.ViewHolder {
             String exercise = s.getCalisthenicsExercise();
 
             summary = String.format(Locale.US,
-                    "%s   |   %f lbs   |   %02d:%02d:%02d",
+                    "%s   |   %.1f lbs   |   %02d:%02d:%02d",
                     exercise, bodyWeight, getHours(totalSec), getMinutes(totalSec), getSeconds(totalSec));
         }
 
@@ -50,6 +56,7 @@ public class StrottaViewHolder extends RecyclerView.ViewHolder {
         sub.setText(
                 s.getDate().format(DateTimeFormatter.ofPattern("MMM d, yyyy • h:mm a"))
         );
+
     }
 
     int getHours(int totalSec) {
