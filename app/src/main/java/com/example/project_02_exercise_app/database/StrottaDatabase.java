@@ -28,6 +28,7 @@ public abstract class StrottaDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "StrottaDatabase";
     public static final String STROTTA_TABLE = "strottaTable";
 
+    public static final String STRENGTH_TABLE = "strengthTable";
 
     private static volatile StrottaDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
